@@ -85,7 +85,7 @@
       requestAnimationFrame(animRing);
     };
     animRing();
-    document.querySelectorAll('a, button, .card-3d, .topic, .testi-card').forEach((el) => {
+    document.querySelectorAll('a, button, .card-3d, .topic, .need, .step, .faq summary').forEach((el) => {
       el.addEventListener('mouseenter', () => cursor && cursor.classList.add('is-hover'));
       el.addEventListener('mouseleave', () => cursor && cursor.classList.remove('is-hover'));
     });

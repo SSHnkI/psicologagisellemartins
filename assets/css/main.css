@@ -565,3 +565,74 @@ body.menu-open { overflow: hidden; }
   .orb, .hero::before { animation: none; }
 }
 :focus-visible { outline: 2px solid var(--wine); outline-offset: 3px; border-radius: 4px; }
+
+/* =====================================================================
+   21. COMPONENTES — demandas · processo · confiança · FAQ
+   ===================================================================== */
+
+/* intro de seção (texto corrido acolhedor) */
+.section-intro { max-width: 760px; margin-bottom: clamp(2.2rem, 5vw, 3.4rem); }
+.section-intro p { color: var(--txt-soft); margin-top: 1rem; }
+
+/* garantias suaves do hero (no lugar de métricas) */
+.hero__assur { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 2.4rem; opacity: 0; animation: fadeUp 1s var(--ease) .8s forwards; }
+.hero__assur span { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.55rem 1rem; border-radius: 100px; background: rgba(255,255,255,0.55); border: 1px solid var(--line); font-size: 0.86rem; color: var(--ink); }
+.hero__assur svg { width: 16px; height: 16px; color: var(--wine); }
+
+/* --- DEMANDAS / "você se reconhece?" --- */
+.needs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; }
+.need {
+  padding: 1.7rem 1.5rem; border-radius: var(--radius); background: var(--card);
+  border: 1px solid var(--line); box-shadow: var(--shadow-sm);
+  transition: transform .5s var(--ease), border-color .5s, box-shadow .5s;
+}
+.need:hover { transform: translateY(-5px); border-color: var(--line-strong); box-shadow: var(--shadow-md); }
+.need__icon { width: 46px; height: 46px; border-radius: 13px; display: grid; place-items: center; background: linear-gradient(140deg, rgba(156,67,89,0.1), rgba(247,210,163,0.18)); border: 1px solid var(--line); color: var(--wine); margin-bottom: 1.1rem; }
+.need__icon svg { width: 23px; height: 23px; }
+.need h3 { font-size: 1.08rem; margin-bottom: 0.4rem; color: var(--ink); }
+.need p { font-size: 0.9rem; color: var(--txt-soft); line-height: 1.55; }
+.needs-note { margin-top: 2rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1.2rem; color: var(--txt-soft); }
+.needs-note .reads { display: inline-flex; flex-wrap: wrap; gap: 0.4rem 1rem; }
+.needs-note .reads a { color: var(--wine); font-weight: 500; }
+.needs-note .reads a:hover { text-decoration: underline; }
+
+/* --- PROCESSO (como funciona) --- */
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; }
+.step {
+  position: relative; padding: 1.9rem 1.6rem; border-radius: var(--radius);
+  background: var(--card); border: 1px solid var(--line); box-shadow: var(--shadow-sm);
+}
+.step__n { font-family: var(--font-display); font-size: 1.05rem; font-weight: 600; color: var(--wine); display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line-strong); margin-bottom: 1.1rem; }
+.step h3 { font-size: 1.12rem; margin-bottom: 0.5rem; color: var(--ink); }
+.step p { font-size: 0.92rem; color: var(--txt-soft); }
+
+.process-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(2rem, 5vw, 4rem); align-items: center; margin-top: clamp(2.5rem, 5vw, 3.5rem); }
+
+/* --- CONFIANÇA / ética --- */
+.trust { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.4rem 2rem; }
+.trust__item { display: flex; gap: 0.9rem; align-items: flex-start; padding: 0.9rem 0; border-top: 1px solid var(--line); }
+.trust__item svg { width: 22px; height: 22px; color: var(--wine); flex-shrink: 0; margin-top: 2px; }
+.trust__item b { color: var(--txt-strong); font-weight: 600; display: block; }
+.trust__item span { font-size: 0.88rem; color: var(--txt-faint); }
+
+/* --- FAQ (nativo, acessível) --- */
+.faq { display: grid; gap: 0.9rem; max-width: 840px; margin-inline: auto; }
+.faq details { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 0 1.5rem; box-shadow: var(--shadow-sm); transition: border-color .4s, box-shadow .4s; }
+.faq details[open] { border-color: var(--line-strong); box-shadow: var(--shadow-md); }
+.faq summary { list-style: none; cursor: none; padding: 1.25rem 0; font-family: var(--font-display); font-weight: 500; font-size: 1.08rem; color: var(--ink); display: flex; justify-content: space-between; gap: 1.2rem; align-items: center; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: '+'; font-family: var(--font-body); font-size: 1.6rem; line-height: 1; color: var(--wine); transition: transform .4s var(--ease); }
+.faq details[open] summary::after { transform: rotate(45deg); }
+.faq__a { padding: 0 0 1.4rem; color: var(--txt-soft); font-size: 0.98rem; line-height: 1.75; max-width: 64ch; }
+@media (hover: none) { .faq summary { cursor: pointer; } }
+
+@media (max-width: 1024px) {
+  .needs { grid-template-columns: repeat(2, 1fr); }
+  .steps { grid-template-columns: repeat(2, 1fr); }
+  .process-grid { grid-template-columns: 1fr; }
+  .trust { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .needs { grid-template-columns: 1fr; }
+  .steps { grid-template-columns: 1fr; }
+}
