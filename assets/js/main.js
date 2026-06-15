@@ -9,11 +9,15 @@
   const isTouch = window.matchMedia('(hover: none)').matches;
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ---------- LOADER ---------- */
-  window.addEventListener('load', () => {
+  /* ---------- LOADER (à prova de falhas) ---------- */
+  const hideLoader = () => {
     const loader = document.querySelector('.loader');
-    if (loader) setTimeout(() => loader.classList.add('done'), 1700);
-  });
+    if (loader) loader.classList.add('done');
+  };
+  // some quando a página carrega...
+  window.addEventListener('load', () => setTimeout(hideLoader, 1100));
+  // ...e garante que nunca trave, mesmo se um CDN demorar
+  setTimeout(hideLoader, 3500);
 
   /* ---------- LENIS SMOOTH SCROLL ---------- */
   let lenis = null;
