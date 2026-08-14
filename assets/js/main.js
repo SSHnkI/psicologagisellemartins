@@ -14,10 +14,16 @@
     const loader = document.querySelector('.loader');
     if (loader) loader.classList.add('done');
   };
-  // some quando a página carrega...
-  window.addEventListener('load', () => setTimeout(hideLoader, 1100));
-  // ...e garante que nunca trave, mesmo se um CDN demorar
-  setTimeout(hideLoader, 3500);
+  if (sessionStorage.getItem('gm-loaded')) {
+    // já mostrou o loader nesta sessão: não repetir o atraso a cada navegação
+    hideLoader();
+  } else {
+    sessionStorage.setItem('gm-loaded', '1');
+    // some quando a página carrega...
+    window.addEventListener('load', () => setTimeout(hideLoader, 1100));
+    // ...e garante que nunca trave, mesmo se um CDN demorar
+    setTimeout(hideLoader, 3500);
+  }
 
   /* ---------- LENIS SMOOTH SCROLL ---------- */
   let lenis = null;
@@ -142,12 +148,10 @@
 
   /* ---------- HERO PARALLAX (mouse) ---------- */
   if (!isTouch && !reduce) {
-    const heroLayer = document.querySelector('.hero__layer');
     const portrait = document.querySelector('.hero__portrait');
     document.querySelector('.hero')?.addEventListener('mousemove', (e) => {
       const cx = (e.clientX / innerWidth - 0.5);
       const cy = (e.clientY / innerHeight - 0.5);
-      if (heroLayer) heroLayer.style.transform = `scale(1.1) translate(${cx * -18}px, ${cy * -18}px)`;
       if (portrait) portrait.style.transform = `translate(${cx * 14}px, ${cy * 14}px)`;
     });
   }
