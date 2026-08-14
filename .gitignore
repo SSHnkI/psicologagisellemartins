@@ -2,3 +2,7 @@
 Thumbs.db
 desktop.ini
 *.tmp
+
+# documento interno de estrategia: o Pages serve a raiz do repo,
+# entao commitar isso publicaria o arquivo no dominio
+AUDITORIA-CONVERSAO.md

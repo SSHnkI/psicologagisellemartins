@@ -2,7 +2,7 @@
    ARTIGOS — herda main.css. Estilos de leitura premium.
    ===================================================================== */
 .article-hero {
-  padding-top: 11rem; padding-bottom: clamp(3rem, 7vw, 5rem);
+  padding-top: 9rem; padding-bottom: clamp(2.5rem, 6vw, 4rem);
   position: relative; overflow: hidden;
 }
 .article-hero::after {
@@ -16,8 +16,8 @@
 .breadcrumb a { color: var(--txt-soft); transition: color .3s; }
 .breadcrumb a:hover { color: var(--wine); }
 .breadcrumb svg { width: 14px; height: 14px; }
-.article-hero h1 { font-size: clamp(2.6rem, 7vw, 5rem); margin: 1.2rem 0; }
-.article-hero .lead { font-size: clamp(1.1rem, 1.8vw, 1.4rem); }
+.article-hero h1 { font-size: clamp(2.1rem, 5.2vw, 3.6rem); margin: 1rem 0; }
+.article-hero .lead { font-size: clamp(1rem, 1.4vw, 1.18rem); }
 
 .article-body { padding-bottom: clamp(4rem, 9vw, 7rem); }
 .article-body .wrap { max-width: 760px; }
@@ -57,6 +57,19 @@
 
 .article-nav { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-top: 3rem; }
 
+@media (max-width: 720px) {
+  /* o hero destas páginas precisa caber na primeira tela do celular:
+     são as páginas de destino de anúncio e de busca */
+  .article-hero { padding-top: 6.2rem; padding-bottom: 2rem; }
+  .article-hero h1 { font-size: clamp(1.85rem, 7.4vw, 2.2rem); margin: .7rem 0; }
+  .article-hero .lead { font-size: .98rem; }
+  .breadcrumb { margin-bottom: 1.2rem; }
+  /* alvos de toque >= 44px */
+  .breadcrumb a, .breadcrumb span { display: inline-flex; align-items: center; min-height: 44px; }
+  .article-nav .link-arrow { min-height: 44px; align-items: center; }
+  .article-nav { gap: .4rem; }
+  .prose p:first-of-type::first-letter { font-size: 2.8rem; }
+}
 @media (max-width: 600px) {
   .symptom-grid { grid-template-columns: 1fr; }
 }

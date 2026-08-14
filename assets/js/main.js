@@ -1,39 +1,33 @@
 /* =====================================================================
    GISELLE MARTINS · interações
-   Lenis (smooth scroll) + IntersectionObserver reveal + cursor +
-   parallax + tilt 3D + magnetic + navbar + menu mobile + loader
+   Reveal (IntersectionObserver) + navbar + menu mobile + loader + tilt.
    JS apenas para motion — o restante é CSS puro.
+
+   Removidos nesta versão, e por quê:
+   · atraso artificial de 1,1s no loader — 2,1s de tela em branco na
+     primeira visita, sem função;
+   · Lenis (CDN externo) — `scroll-behavior: smooth` do CSS já resolve,
+     sem request de terceiros nem inércia de rolagem;
+   · cursor customizado — escondia o cursor nativo e apagava a affordance
+     de clicável; sem cursor nenhum se o JS falhasse;
+   · botões magnéticos — o CTA fugia do ponteiro em até 35%.
    ===================================================================== */
 (() => {
   'use strict';
   const isTouch = window.matchMedia('(hover: none)').matches;
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ---------- LOADER (à prova de falhas) ---------- */
+  /* ---------- LOADER (sem atraso artificial, à prova de falhas) ---------- */
   const hideLoader = () => {
     const loader = document.querySelector('.loader');
     if (loader) loader.classList.add('done');
   };
-  if (sessionStorage.getItem('gm-loaded')) {
-    // já mostrou o loader nesta sessão: não repetir o atraso a cada navegação
-    hideLoader();
-  } else {
-    sessionStorage.setItem('gm-loaded', '1');
-    // some quando a página carrega...
-    window.addEventListener('load', () => setTimeout(hideLoader, 1100));
-    // ...e garante que nunca trave, mesmo se um CDN demorar
-    setTimeout(hideLoader, 3500);
-  }
+  if (document.readyState !== 'loading') hideLoader();
+  else document.addEventListener('DOMContentLoaded', hideLoader);
+  setTimeout(hideLoader, 2500); // rede de segurança
 
-  /* ---------- LENIS SMOOTH SCROLL ---------- */
-  let lenis = null;
-  if (!reduce && window.Lenis) {
-    lenis = new Lenis({ duration: 1.15, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
-    function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
-    requestAnimationFrame(raf);
-  }
-
-  /* ---------- ÂNCORAS ---------- */
+  /* ---------- ÂNCORAS ----------
+     O deslocamento da navbar fixa vem de `scroll-margin-top` no CSS. */
   document.querySelectorAll('a[href^="#"]').forEach((a) => {
     a.addEventListener('click', (e) => {
       const id = a.getAttribute('href');
@@ -42,8 +36,7 @@
       if (!el) return;
       e.preventDefault();
       closeMenu();
-      if (lenis) lenis.scrollTo(el, { offset: -70 });
-      else el.scrollIntoView({ behavior: 'smooth' });
+      el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
     });
   });
 
@@ -59,16 +52,19 @@
   function closeMenu() {
     if (!menu) return;
     menu.classList.remove('open');
-    burger && burger.classList.remove('active');
+    if (burger) { burger.classList.remove('active'); burger.setAttribute('aria-expanded', 'false'); }
     document.body.classList.remove('menu-open');
   }
   if (burger && menu) {
+    burger.setAttribute('aria-expanded', 'false');
     burger.addEventListener('click', () => {
       const open = menu.classList.toggle('open');
       burger.classList.toggle('active', open);
+      burger.setAttribute('aria-expanded', String(open));
       document.body.classList.toggle('menu-open', open);
     });
     menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeMenu));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
   }
 
   /* ---------- REVEAL (IntersectionObserver) ---------- */
@@ -78,28 +74,6 @@
   document.querySelectorAll('.reveal, .reveal-line').forEach((el) => io.observe(el));
 
   if (reduce) { document.querySelectorAll('.reveal, .reveal-line').forEach((el) => el.classList.add('in')); }
-
-  /* ---------- CURSOR CUSTOMIZADO ---------- */
-  if (!isTouch && !reduce) {
-    const cursor = document.querySelector('.cursor');
-    const dot = document.querySelector('.cursor__dot');
-    const ring = document.querySelector('.cursor__ring');
-    let mx = innerWidth / 2, my = innerHeight / 2, rx = mx, ry = my;
-    window.addEventListener('mousemove', (e) => {
-      mx = e.clientX; my = e.clientY;
-      if (dot) { dot.style.left = mx + 'px'; dot.style.top = my + 'px'; }
-    });
-    const animRing = () => {
-      rx += (mx - rx) * 0.18; ry += (my - ry) * 0.18;
-      if (ring) { ring.style.left = rx + 'px'; ring.style.top = ry + 'px'; }
-      requestAnimationFrame(animRing);
-    };
-    animRing();
-    document.querySelectorAll('a, button, .card-3d, .topic, .need, .step, .faq summary').forEach((el) => {
-      el.addEventListener('mouseenter', () => cursor && cursor.classList.add('is-hover'));
-      el.addEventListener('mouseleave', () => cursor && cursor.classList.remove('is-hover'));
-    });
-  }
 
   /* ---------- PARALLAX (data-parallax) ---------- */
   if (!reduce) {
@@ -130,19 +104,6 @@
         card.style.setProperty('--my', py * 100 + '%');
       });
       card.addEventListener('mouseleave', () => { card.style.transform = ''; });
-    });
-  }
-
-  /* ---------- BOTÕES MAGNÉTICOS (data-magnetic) ---------- */
-  if (!isTouch && !reduce) {
-    document.querySelectorAll('[data-magnetic]').forEach((btn) => {
-      btn.addEventListener('mousemove', (e) => {
-        const r = btn.getBoundingClientRect();
-        const x = e.clientX - r.left - r.width / 2;
-        const y = e.clientY - r.top - r.height / 2;
-        btn.style.transform = `translate(${x * 0.25}px, ${y * 0.35}px)`;
-      });
-      btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
     });
   }
 

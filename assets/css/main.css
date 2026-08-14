@@ -104,8 +104,8 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
-html.lenis, html.lenis body { height: auto; }
-.lenis.lenis-smooth { scroll-behavior: auto !important; }
+/* compensa a navbar fixa nas âncoras (substitui o offset que o Lenis fazia) */
+:target, section[id], main[id] { scroll-margin-top: 88px; }
 
 body {
   font-family: var(--font-body);
@@ -117,14 +117,15 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   position: relative;
-  cursor: none;
 }
-@media (hover: none) { body { cursor: auto; } }
 
-img { max-width: 100%; display: block; }
+/* height:auto é obrigatório junto com os atributos width/height do HTML:
+   sem ele o atributo vira dimensão fixa e anula o aspect-ratio do CSS.
+   Os atributos existem para reservar espaço e evitar CLS. */
+img { max-width: 100%; display: block; height: auto; }
 a { color: inherit; text-decoration: none; }
 ul { list-style: none; }
-button { font-family: inherit; cursor: none; }
+button { font-family: inherit; cursor: pointer; }
 
 ::selection { background: rgba(188, 134, 147, 0.4); color: var(--wine-900); }
 
@@ -189,7 +190,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
    ===================================================================== */
 .loader {
   position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center;
-  background: var(--cream); transition: opacity 0.9s var(--ease), visibility 0.9s;
+  background: var(--cream); transition: opacity 0.4s var(--ease), visibility 0.4s;
 }
 .loader.done { opacity: 0; visibility: hidden; }
 .loader__inner { text-align: center; }
@@ -202,15 +203,10 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 @keyframes loadUp { to { opacity: 1; transform: none; } }
 @keyframes loadBar { to { width: 100%; } }
 
-/* =====================================================================
-   06. CURSOR CUSTOMIZADO
-   ===================================================================== */
-.cursor { position: fixed; top: 0; left: 0; z-index: 9000; pointer-events: none; }
-.cursor__dot { position: fixed; width: 7px; height: 7px; border-radius: 50%; background: var(--wine); translate: -50% -50%; transition: opacity .3s, scale .2s var(--ease); }
-.cursor__ring { position: fixed; width: 38px; height: 38px; border-radius: 50%; border: 1px solid rgba(156,67,89,0.5); translate: -50% -50%; transition: width .35s var(--ease), height .35s var(--ease), background .35s, border-color .35s, opacity .3s; }
-.cursor.is-hover .cursor__ring { width: 64px; height: 64px; background: rgba(188,134,147,0.16); border-color: rgba(156,67,89,0.8); }
-.cursor.is-hover .cursor__dot { scale: 0.4; }
-@media (hover: none) { .cursor { display: none; } }
+/* 06. CURSOR CUSTOMIZADO — removido.
+   Escondia o cursor nativo (body{cursor:none}) e apagava a affordance de
+   "clicável" em botões e no FAQ; se o JS falhasse, a página ficava sem
+   cursor nenhum. Custo de acessibilidade maior que o ganho estético. */
 
 /* =====================================================================
    07. NAVEGAÇÃO (adaptativa: cream sobre hero vinho → vinho sobre claro)
@@ -250,8 +246,13 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
   opacity: 0; visibility: hidden; transition: opacity .5s var(--ease), visibility .5s;
 }
 .mobile-menu.open { opacity: 1; visibility: visible; }
-.mobile-menu a { font-family: var(--font-display); font-size: clamp(1.8rem, 7vw, 2.6rem); color: var(--on-wine); padding: 0.4rem; transition: color .3s; }
+.mobile-menu a { font-family: var(--font-display); font-size: clamp(1.6rem, 6.2vw, 2.2rem); color: var(--on-wine); padding: 0.35rem; transition: color .3s; }
 .mobile-menu a:hover { color: var(--gold); }
+.mobile-menu__cta {
+  margin-top: 1.2rem; padding: .85rem 1.8rem !important; border-radius: 100px;
+  background: var(--gold); color: var(--wine-900) !important;
+  font-size: 1.15rem !important; font-weight: 600;
+}
 body.menu-open { overflow: hidden; }
 
 /* =====================================================================
@@ -290,7 +291,11 @@ body.menu-open { overflow: hidden; }
    ===================================================================== */
 .hero {
   min-height: 100svh; display: flex; align-items: center;
-  padding-top: 8rem; padding-bottom: 4rem; overflow: hidden;
+  /* comprimido: o CTA e a prova precisam caber na primeira viewport de
+     1280x720 (notebook mais comum). Critério: .btn--primary bottom <= 640px.
+     6.5rem = 104px, o suficiente para o conteúdo não passar por baixo da
+     navbar fixa (105px de altura antes do scroll). */
+  padding-top: 6.5rem; padding-bottom: 2.5rem; overflow: hidden;
   background: linear-gradient(180deg, #fdf8f2 0%, var(--cream) 55%, #f6ebdf 100%);
   color: var(--ink);
 }
@@ -309,7 +314,8 @@ body.menu-open { overflow: hidden; }
 
 .hero__grid { position: relative; z-index: 2; display: grid; grid-template-columns: 1.12fr 0.88fr; gap: clamp(2rem, 5vw, 5rem); align-items: center; width: 100%; }
 .hero__content { position: relative; z-index: 2; }
-.hero h1 { margin: 1.5rem 0; font-size: clamp(2.5rem, 5.4vw, 4.7rem); }
+.hero h1 { margin: 0.6rem 0; font-size: clamp(1.95rem, 3.6vw, 3.1rem); }
+.hero .lead { font-size: clamp(0.98rem, 1.2vw, 1.08rem); max-width: 52ch; }
 .hero h1 .line { display: block; overflow: hidden; padding-bottom: 0.08em; }
 .hero h1 .line > span { display: block; transform: translateY(110%); animation: heroLine 1.1s var(--ease) forwards; }
 .hero h1 .line:nth-child(2) > span { animation-delay: .12s; }
@@ -317,7 +323,15 @@ body.menu-open { overflow: hidden; }
 @keyframes heroLine { to { transform: translateY(0); } }
 
 .hero__intro { opacity: 0; animation: fadeUp 1s var(--ease) .5s forwards; }
-.hero__actions { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2.4rem; opacity: 0; animation: fadeUp 1s var(--ease) .65s forwards; }
+.hero__actions { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 0; opacity: 0; animation: fadeUp 1s var(--ease) .65s forwards; }
+.hero__micro { margin-top: .5rem; font-size: .82rem; line-height: 1.5; color: var(--txt-soft); opacity: 0; animation: fadeUp 1s var(--ease) .8s forwards; }
+
+/* identidade compacta — só no mobile, onde o retrato grande sai da dobra.
+   Rosto + nome + CRP na primeira tela: é o maior gatilho de confiança. */
+.hero__id { display: none; align-items: center; gap: .8rem; opacity: 0; animation: fadeUp 1s var(--ease) .35s forwards; }
+.hero__id img { width: 58px; height: 58px; border-radius: 50%; object-fit: cover; object-position: center 18%; border: 2px solid var(--ivory); box-shadow: var(--shadow-md); flex-shrink: 0; }
+.hero__id b { display: block; font-family: var(--font-display); font-size: 1.05rem; font-weight: 600; color: var(--txt-strong); line-height: 1.2; }
+.hero__id span { font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; color: var(--wine); }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
 
 .hero__portrait { position: relative; z-index: 1; opacity: 0; animation: fadeUp 1.2s var(--ease) .4s forwards; }
@@ -455,22 +469,28 @@ body.menu-open { overflow: hidden; }
 /* =====================================================================
    16. BOTÕES FLUTUANTES (WhatsApp + Instagram)
    ===================================================================== */
-.wa-float { position: fixed; right: 1.5rem; bottom: 1.5rem; z-index: 700; width: 60px; height: 60px; border-radius: 50%; display: grid; place-items: center; background: #25D366; box-shadow: 0 12px 30px -8px rgba(37,211,102,0.6); transition: transform .4s var(--ease); cursor: none; }
+.wa-float { position: fixed; right: 1.5rem; bottom: calc(1.5rem + env(safe-area-inset-bottom)); z-index: 700; width: 60px; height: 60px; border-radius: 50%; display: grid; place-items: center; background: #25D366; box-shadow: 0 12px 30px -8px rgba(37,211,102,0.6); transition: transform .4s var(--ease); }
 .wa-float::before { content:''; position:absolute; inset:0; border-radius:50%; border:2px solid #25D366; animation: pulseRing 2.4s infinite; }
 .wa-float:hover { transform: scale(1.08); }
 .wa-float svg { width: 32px; height: 32px; fill: #fff; }
 
-.ig-float {
-  position: fixed; right: 1.5rem; bottom: 6.25rem; z-index: 700; width: 60px; height: 60px; border-radius: 50%;
-  display: grid; place-items: center; color: #fff;
-  background: radial-gradient(circle at 30% 110%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
-  box-shadow: 0 12px 30px -8px rgba(214,36,159,0.55); transition: transform .4s var(--ease); cursor: none;
-}
-.ig-float::before { content:''; position:absolute; inset:0; border-radius:50%; border:2px solid #d6249f; animation: pulseRing 2.4s .8s infinite; }
-.ig-float:hover { transform: scale(1.08); }
-.ig-float svg { width: 27px; height: 27px; }
+/* Instagram flutuante REMOVIDO: competia com o WhatsApp pelo mesmo clique e
+   levava o visitante para fora do site exatamente no momento de intenção.
+   O Instagram continua no rodapé e no menu. */
 
 @keyframes pulseRing { 0%{transform:scale(1);opacity:.7;} 100%{transform:scale(1.7);opacity:0;} }
+
+/* --- BARRA FIXA DE CTA (mobile) — substitui o FAB circular ---
+   Ícone sozinho é ambíguo; barra com texto diz o que acontece ao tocar.
+   Resolve os ~12.000px de rolagem sem CTA no meio da página. */
+.mobile-cta {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 750; display: none;
+  padding: .65rem 1rem calc(.65rem + env(safe-area-inset-bottom));
+  background: rgba(251, 244, 236, 0.94);
+  backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border-top: 1px solid var(--line); box-shadow: 0 -8px 30px -18px rgba(86, 31, 48, 0.4);
+}
+.mobile-cta .btn { width: 100%; justify-content: center; min-height: 52px; }
 
 /* =====================================================================
    17. RESPONSIVO
@@ -500,11 +520,40 @@ body.menu-open { overflow: hidden; }
   .topic--wide { flex-direction: column; align-items: flex-start; }
   .footer__grid { grid-template-columns: 1fr; }
   .about__quote { position: static; margin-top: 1rem; max-width: none; }
-  .hero { padding-top: 7rem; }
-  .hero__stats { gap: 1.5rem; }
-  .hero__chip--1 { display: none; }
   .scroll-hint { display: none; }
-  .hero__portrait { margin-top: 0.5rem; }
+
+  /* --- HERO MOBILE ---
+     O retrato grande empurrava o CTA e as garantias para a 2ª tela
+     (medido: retrato em 922px num viewport de 812px). Ele sai daqui e a
+     identidade volta como avatar compacto, no topo. */
+  .hero { padding-top: 4.5rem; padding-bottom: 2rem; min-height: 0; }
+  .hero__portrait { display: none; }
+  .hero__id { display: flex; }
+  .hero .eyebrow { display: none; }
+  /* a identidade fica no hero (com o rosto), não repetida na navbar:
+     no mobile a marca é só o selo */
+  .nav .brand > span { display: none; }
+  .hero h1 { font-size: clamp(1.85rem, 7.6vw, 2.15rem); margin: .8rem 0; }
+  .hero .lead { font-size: .98rem; }
+  .hero__assur { gap: .4rem; margin: 1rem 0; }
+  .hero__assur span { font-size: .76rem; padding: .38rem .7rem; }
+  .hero__actions { flex-direction: column; gap: .7rem; }
+  .hero__actions .btn { width: 100%; justify-content: center; }
+
+  /* barra fixa substitui o FAB circular */
+  .mobile-cta { display: block; }
+  .wa-float { display: none; }
+  body { padding-bottom: 76px; }
+
+  .inline-cta { flex-direction: column; align-items: stretch; text-align: center; padding: 1.4rem 1.2rem; }
+  .inline-cta .btn { justify-content: center; }
+
+  /* alvos de toque >= 44px (WCAG 2.5.5) */
+  .needs-note .reads a { display: inline-flex; align-items: center; min-height: 44px; }
+  .nav__burger { padding: 14px 10px; }
+  .footer__col a { padding: .72rem 0; }
+  .footer__bottom a { display: inline-block; padding: .85rem 0; }
+  .socials a { width: 46px; height: 46px; }
 }
 
 /* =====================================================================
@@ -513,11 +562,10 @@ body.menu-open { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
   .orb { animation: none; }
-  /* JS never attaches the custom cursor under reduced-motion (main.js), so the native cursor must come back */
-  .cursor { display: none; }
-  body, button, .wa-float, .faq summary { cursor: auto; }
 }
 :focus-visible { outline: 2px solid var(--wine); outline-offset: 3px; border-radius: 4px; }
+/* o CTA fixo do mobile não pode tapar o alvo do foco ao navegar por teclado */
+.mobile-cta a:focus-visible { outline-offset: -3px; }
 
 /* =====================================================================
    19. COMPONENTES — demandas · processo · confiança · FAQ
@@ -527,10 +575,26 @@ body.menu-open { overflow: hidden; }
 .section-intro { max-width: 760px; margin-bottom: clamp(2.2rem, 5vw, 3.4rem); }
 .section-intro p { color: var(--txt-soft); margin-top: 1rem; }
 
-/* garantias suaves do hero (no lugar de métricas) */
-.hero__assur { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 2.4rem; opacity: 0; animation: fadeUp 1s var(--ease) .8s forwards; }
-.hero__assur span { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.55rem 1rem; border-radius: 100px; background: rgba(255,255,255,0.55); border: 1px solid var(--line); font-size: 0.86rem; color: var(--ink); }
-.hero__assur svg { width: 16px; height: 16px; color: var(--wine); }
+/* garantias do hero — fatos verificáveis, não adjetivos.
+   Ficam ANTES dos botões: prova precisa ser lida junto com a ação. */
+.hero__assur { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.8rem 0; opacity: 0; animation: fadeUp 1s var(--ease) .75s forwards; }
+.hero__assur span { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.4rem 0.82rem; border-radius: 100px; background: rgba(255,255,255,0.6); border: 1px solid var(--line); font-size: 0.8rem; color: var(--ink); }
+.hero__assur svg { width: 15px; height: 15px; color: var(--wine); flex-shrink: 0; }
+
+/* --- CTA CONTEXTUAL (no fim das seções que geram intenção) --- */
+.inline-cta {
+  display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap;
+  margin-top: clamp(2rem, 4vw, 3rem); padding: 1.5rem 1.8rem; border-radius: var(--radius);
+  background: var(--ivory); border: 1px solid var(--line-strong); box-shadow: var(--shadow-sm);
+}
+.inline-cta p { margin: 0; max-width: 48ch; color: var(--txt-strong); font-weight: 500; font-size: 1.02rem; }
+.inline-cta .btn { flex-shrink: 0; }
+.inline-cta svg { width: 18px; height: 18px; }
+
+/* --- INFORMAÇÕES PRÁTICAS (reaproveita o grid .trust) --- */
+.practical { grid-template-columns: repeat(3, 1fr); gap: 0.4rem 2.5rem; }
+.practical .trust__item span { color: var(--txt-soft); }
+.pending { color: var(--wine); font-weight: 600; }
 
 /* --- DEMANDAS / "você se reconhece?" --- */
 .needs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; }
@@ -572,7 +636,7 @@ body.menu-open { overflow: hidden; }
 .faq { display: grid; gap: 0.9rem; max-width: 840px; margin-inline: auto; }
 .faq details { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 0 1.5rem; box-shadow: var(--shadow-sm); transition: border-color .4s, box-shadow .4s; }
 .faq details[open] { border-color: var(--line-strong); box-shadow: var(--shadow-md); }
-.faq summary { list-style: none; cursor: none; padding: 1.25rem 0; font-family: var(--font-display); font-weight: 500; font-size: 1.08rem; color: var(--ink); display: flex; justify-content: space-between; gap: 1.2rem; align-items: center; }
+.faq summary { list-style: none; cursor: pointer; padding: 1.25rem 0; font-family: var(--font-display); font-weight: 500; font-size: 1.08rem; color: var(--ink); display: flex; justify-content: space-between; gap: 1.2rem; align-items: center; }
 .faq summary::-webkit-details-marker { display: none; }
 .faq summary::after { content: '+'; font-family: var(--font-body); font-size: 1.6rem; line-height: 1; color: var(--wine); transition: transform .4s var(--ease); }
 .faq details[open] summary::after { transform: rotate(45deg); }
