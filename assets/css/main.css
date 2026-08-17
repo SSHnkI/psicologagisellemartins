@@ -171,7 +171,10 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
     radial-gradient(900px 680px at 5% 105%, rgba(247, 210, 163, 0.2), transparent 60%),
     var(--cream);
 }
-.orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.5; will-change: transform; }
+/* Sem `filter: blur(80px)`: o gradiente radial já desvanece para transparente,
+   então o desfoque era redundante — e refazia o blur de 3 camadas de 32–44vw em
+   cada frame das animações `drift`. Era a maior fonte de travamento do site. */
+.orb { position: absolute; border-radius: 50%; opacity: 0.5; will-change: transform; }
 .orb--1 { width: 44vw; height: 44vw; left: -8vw; top: -6vw; background: radial-gradient(circle at 30% 30%, var(--mauve), transparent 70%); animation: drift1 24s var(--ease-soft) infinite alternate; }
 .orb--2 { width: 36vw; height: 36vw; right: -6vw; top: 30vh; background: radial-gradient(circle at 60% 40%, var(--gold), transparent 70%); opacity: 0.35; animation: drift2 28s var(--ease-soft) infinite alternate; }
 .orb--3 { width: 32vw; height: 32vw; left: 30vw; bottom: -12vw; background: radial-gradient(circle at 50% 50%, var(--wine-soft), transparent 70%); opacity: 0.22; animation: drift3 32s var(--ease-soft) infinite alternate; }
@@ -182,6 +185,9 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 .grain {
   /* estática de propósito: textura sem repaint constante */
   position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: 0.04;
+  /* promove a camada — overlay fixo sem promoção repinta a viewport
+     inteira em cada frame de rolagem. */
+  transform: translateZ(0);
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
@@ -215,13 +221,15 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
   position: fixed; top: 0; left: 0; right: 0; z-index: 800;
   display: flex; align-items: center; justify-content: space-between;
   padding: 1.4rem var(--pad);
-  transition: padding .5s var(--ease), background .5s, backdrop-filter .5s, border-color .5s, box-shadow .5s;
+  transition: padding .5s var(--ease), background .5s, border-color .5s, box-shadow .5s;
   border-bottom: 1px solid transparent;
 }
 .nav.scrolled {
   padding-block: 0.8rem;
-  background: rgba(251, 244, 236, 0.82);
-  backdrop-filter: blur(18px) saturate(140%); -webkit-backdrop-filter: blur(18px) saturate(140%);
+  /* fundo quase opaco em vez de backdrop-filter. Barra fixa com
+     blur obriga o compositor a refazer o desfoque da viewport inteira a cada
+     frame de rolagem; a diferença visual com 0.96 de opacidade é mínima. */
+  background: rgba(251, 244, 236, 0.96);
   border-bottom: 1px solid var(--line); box-shadow: var(--shadow-sm);
 }
 .brand { display: flex; align-items: center; gap: 0.75rem; }
@@ -241,7 +249,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 
 .mobile-menu {
   position: fixed; inset: 0; z-index: 790;
-  background: rgba(111, 47, 64, 0.96); backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
+  background: rgba(111, 47, 64, 0.985); /* opaco em vez de blur de tela cheia */
   display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 0.5rem;
   opacity: 0; visibility: hidden; transition: opacity .5s var(--ease), visibility .5s;
 }
@@ -345,7 +353,7 @@ body.menu-open { overflow: hidden; }
 .portrait-badge {
   position: absolute; right: 1rem; bottom: 1rem; z-index: 4;
   display: flex; align-items: center; gap: 0.6rem; padding: 0.65rem 0.95rem; border-radius: 100px;
-  background: rgba(255,255,255,0.88); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.6); max-width: calc(100% - 2rem); box-shadow: var(--shadow-sm);
+  background: rgba(255,255,255,0.94); border: 1px solid rgba(255,255,255,0.6); max-width: calc(100% - 2rem); box-shadow: var(--shadow-sm);
 }
 .portrait-badge i { width: 9px; height: 9px; border-radius: 50%; background: #3fae6b; box-shadow: 0 0 12px #6fd49a; flex-shrink: 0; animation: pulse 2s infinite; }
 .portrait-badge span { font-size: 0.78rem; color: var(--wine-900); font-weight: 500; line-height: 1.25; }
@@ -354,7 +362,9 @@ body.menu-open { overflow: hidden; }
 
 .hero__chip {
   position: absolute; z-index: 4; padding: 0.6rem 0.95rem; border-radius: 14px;
-  background: rgba(255,255,255,0.85); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  /* sem blur — o chip tem animação `floaty` infinita, e desfoque
+     em elemento animado é recomposto a cada frame. */
+  background: rgba(255,255,255,0.93);
   border: 1px solid var(--line-strong); font-size: 0.8rem; color: var(--ink); box-shadow: var(--shadow-md); white-space: nowrap;
 }
 .hero__chip--1 { top: 1rem; left: 1rem; animation: floaty 5s var(--ease-soft) infinite alternate; }
@@ -486,8 +496,7 @@ body.menu-open { overflow: hidden; }
 .mobile-cta {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 750; display: none;
   padding: .65rem 1rem calc(.65rem + env(safe-area-inset-bottom));
-  background: rgba(251, 244, 236, 0.94);
-  backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%);
+  background: rgba(251, 244, 236, 0.97); /* opaco — blur fixo custa caro no celular */
   border-top: 1px solid var(--line); box-shadow: 0 -8px 30px -18px rgba(86, 31, 48, 0.4);
 }
 .mobile-cta .btn { width: 100%; justify-content: center; min-height: 52px; }

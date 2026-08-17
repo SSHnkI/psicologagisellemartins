@@ -17,6 +17,19 @@
   const isTouch = window.matchMedia('(hover: none)').matches;
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* Limitador único de rAF para scroll e mousemove. Sem ele cada evento
+     escrevia `transform` na hora — e scroll e mouse disparam bem mais que
+     60x/s, obrigando o navegador a recalcular estilo em todos. */
+  const raf = (fn) => {
+    let queued = false, last;
+    return (...args) => {
+      last = args;
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => { queued = false; fn(...last); });
+    };
+  };
+
   /* ---------- LOADER (sem atraso artificial, à prova de falhas) ---------- */
   const hideLoader = () => {
     const loader = document.querySelector('.loader');
@@ -79,13 +92,13 @@
   if (!reduce) {
     const layers = [...document.querySelectorAll('[data-parallax]')];
     if (layers.length) {
-      const onParallax = () => {
+      const onParallax = raf(() => {
         const y = window.scrollY;
         layers.forEach((l) => {
           const speed = parseFloat(l.dataset.parallax) || 0.2;
           l.style.transform = `translate3d(0, ${y * speed}px, 0)`;
         });
-      };
+      });
       window.addEventListener('scroll', onParallax, { passive: true });
       onParallax();
     }
@@ -95,26 +108,30 @@
   if (!isTouch && !reduce) {
     document.querySelectorAll('[data-tilt]').forEach((card) => {
       const max = 9;
-      card.addEventListener('mousemove', (e) => {
-        const r = card.getBoundingClientRect();
+      /* rect medido no mouseenter, não a cada mousemove — ler
+         getBoundingClientRect no meio do movimento força layout sincrônico. */
+      let r = null;
+      card.addEventListener('mouseenter', () => { r = card.getBoundingClientRect(); });
+      card.addEventListener('mousemove', raf((e) => {
+        if (!r) r = card.getBoundingClientRect();
         const px = (e.clientX - r.left) / r.width;
         const py = (e.clientY - r.top) / r.height;
         card.style.transform = `perspective(900px) rotateY(${(px - 0.5) * max}deg) rotateX(${(0.5 - py) * max}deg) translateY(-6px)`;
         card.style.setProperty('--mx', px * 100 + '%');
         card.style.setProperty('--my', py * 100 + '%');
-      });
-      card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+      }));
+      card.addEventListener('mouseleave', () => { card.style.transform = ''; r = null; });
     });
   }
 
   /* ---------- HERO PARALLAX (mouse) ---------- */
   if (!isTouch && !reduce) {
     const portrait = document.querySelector('.hero__portrait');
-    document.querySelector('.hero')?.addEventListener('mousemove', (e) => {
+    document.querySelector('.hero')?.addEventListener('mousemove', raf((e) => {
       const cx = (e.clientX / innerWidth - 0.5);
       const cy = (e.clientY / innerHeight - 0.5);
       if (portrait) portrait.style.transform = `translate(${cx * 14}px, ${cy * 14}px)`;
-    });
+    }));
   }
 
   /* ---------- ANO RODAPÉ ---------- */
