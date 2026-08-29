@@ -1,6 +1,6 @@
 /* =====================================================================
    GISELLE MARTINS · PSICOLOGIA E NEUROPSICOLOGIA
-   Experiência acolhedora — paleta da marca (vinho · mauve · creme-dourado)
+   Experiência acolhedora: paleta da marca (vinho · mauve · creme-dourado)
    Índice:
      01. Tokens & variáveis
      02. Reset & base
@@ -20,7 +20,7 @@
      16. WhatsApp flutuante
      17. Responsivo
      18. Acessibilidade & performance
-     19. Componentes — demandas · processo · confiança · FAQ
+     19. Componentes: demandas · processo · confiança · FAQ
    ===================================================================== */
 
 /* Fonte carregada via <link> no <head> de cada página (não @import: evita cadeia de 3 requisições sequenciais) */
@@ -90,6 +90,23 @@
   --pad: clamp(1.25rem, 5vw, 6rem);
   --radius: 26px;
   --radius-lg: 38px;
+  /* raio interno menor que o do container: caixa dentro de caixa não pode
+     ter a mesma curva, senão a borda interna "estoura" a externa */
+  --radius-sm: 14px;
+
+  /* ritmo vertical: assimétrico de propósito: o olho lê o fim de uma seção
+     como mais próximo do que ele é, então o respiro de baixo é maior */
+  --sec-top: clamp(3.5rem, 7vw, 6.5rem);
+  --sec-bottom: clamp(4.25rem, 8.5vw, 8rem);
+
+  /* altura real da barra fixa de CTA no mobile (usada no padding do body) */
+  --bar-h: 5.25rem;
+
+  /* escala de z-index: sem números mágicos espalhados */
+  --z-float: 700;
+  --z-bar: 750;
+  --z-menu: 790;
+  --z-nav: 800;
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-soft: cubic-bezier(0.16, 1, 0.3, 1);
@@ -132,28 +149,46 @@ button { font-family: inherit; cursor: pointer; }
 .wrap { width: 100%; max-width: var(--maxw); margin-inline: auto; padding-inline: var(--pad); }
 section { position: relative; }
 
+/* pular para o conteúdo: obrigatório para quem navega por teclado */
+.skip-link {
+  position: absolute; left: 1rem; top: -100px; z-index: 1000;
+  padding: .8rem 1.3rem; border-radius: 100px;
+  background: var(--wine); color: var(--on-wine); font-weight: 600; font-size: .9rem;
+  transition: top .25s var(--ease);
+}
+.skip-link:focus-visible { top: 1rem; }
+
 /* =====================================================================
    03. TIPOGRAFIA
    ===================================================================== */
-h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height: 1.05; letter-spacing: -0.015em; color: var(--txt-strong); }
+h1, h2, h3, h4 {
+  font-family: var(--font-display); font-weight: 600; line-height: 1.05;
+  letter-spacing: -0.015em; color: var(--txt-strong);
+  /* evita a palavra órfã sozinha na última linha do título */
+  text-wrap: balance;
+}
+p { text-wrap: pretty; }
 
 .eyebrow {
-  font-family: var(--font-body); font-size: 0.8rem; font-weight: 600;
-  letter-spacing: 0.3em; text-transform: uppercase; color: var(--wine);
-  display: inline-flex; align-items: center; gap: 0.8rem;
+  font-family: var(--font-body); font-size: 0.78rem; font-weight: 600;
+  letter-spacing: 0.24em; text-transform: uppercase; color: var(--wine);
+  display: inline-flex; align-items: center; gap: 0.7rem;
 }
-.eyebrow::before { content: ''; width: 34px; height: 1px; background: linear-gradient(90deg, transparent, var(--wine)); }
+.eyebrow::before { content: ''; width: 28px; height: 1px; background: linear-gradient(90deg, transparent, var(--wine)); }
 
-.display-1 { font-size: clamp(2.9rem, 9vw, 7.4rem); font-weight: 600; }
-.display-2 { font-size: clamp(2.2rem, 5.5vw, 4.4rem); }
-.lead { font-size: clamp(1.05rem, 1.6vw, 1.35rem); color: var(--txt-soft); font-weight: 400; max-width: 60ch; }
+/* tracking negativo cresce junto com o corpo: o que é confortável em 2rem
+   fica frouxo em 6rem */
+.display-1 { font-size: clamp(2.6rem, 7.5vw, 5.6rem); font-weight: 600; letter-spacing: -0.035em; line-height: 1.02; }
+.display-2 { font-size: clamp(2rem, 4.4vw, 3.4rem); letter-spacing: -0.025em; line-height: 1.08; }
+.lead { font-size: clamp(1.02rem, 1.35vw, 1.2rem); color: var(--txt-soft); font-weight: 400; max-width: 58ch; line-height: 1.62; }
 
 .grad-text { background: var(--grad-text); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
 .wine-text { color: var(--wine); }
 .italic-serif { font-style: italic; }
 
-.section-head { max-width: 720px; margin-bottom: clamp(2.5rem, 6vw, 4.5rem); }
-.section-head h2 { margin: 1.2rem 0; }
+.section-head { max-width: 700px; margin-bottom: clamp(2.2rem, 4.5vw, 3.4rem); }
+.section-head h2 { margin: 1rem 0 .9rem; }
+.section-head .lead { max-width: 54ch; }
 
 /* tom sobre seções vinho */
 .on-wine, .on-wine h1, .on-wine h2, .on-wine h3, .on-wine h4 { color: var(--on-wine); }
@@ -162,7 +197,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 .on-wine .lead { color: var(--on-wine-soft); }
 
 /* =====================================================================
-   04. AMBIENTE — glows quentes + grão
+   04. AMBIENTE: glows quentes + grão
    ===================================================================== */
 .ambient {
   position: fixed; inset: 0; z-index: -2; overflow: hidden; pointer-events: none;
@@ -172,7 +207,7 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
     var(--cream);
 }
 /* Sem `filter: blur(80px)`: o gradiente radial já desvanece para transparente,
-   então o desfoque era redundante — e refazia o blur de 3 camadas de 32–44vw em
+   então o desfoque era redundante: e refazia o blur de 3 camadas de 3244vw em
    cada frame das animações `drift`. Era a maior fonte de travamento do site. */
 .orb { position: absolute; border-radius: 50%; opacity: 0.5; will-change: transform; }
 .orb--1 { width: 44vw; height: 44vw; left: -8vw; top: -6vw; background: radial-gradient(circle at 30% 30%, var(--mauve), transparent 70%); animation: drift1 24s var(--ease-soft) infinite alternate; }
@@ -185,31 +220,18 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; line-height
 .grain {
   /* estática de propósito: textura sem repaint constante */
   position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: 0.04;
-  /* promove a camada — overlay fixo sem promoção repinta a viewport
+  /* promove a camada: overlay fixo sem promoção repinta a viewport
      inteira em cada frame de rolagem. */
   transform: translateZ(0);
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* =====================================================================
-   05. LOADING SCREEN
-   ===================================================================== */
-.loader {
-  position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center;
-  background: var(--cream); transition: opacity 0.4s var(--ease), visibility 0.4s;
-}
-.loader.done { opacity: 0; visibility: hidden; }
-.loader__inner { text-align: center; }
-.loader__seal { width: 86px; height: 86px; margin: 0 auto 1.2rem; opacity: 0; transform: scale(0.85); animation: loadUp 1s var(--ease) .1s forwards; }
-.loader__mark { font-family: var(--font-display); font-size: clamp(1.6rem, 4vw, 2.3rem); font-weight: 500; letter-spacing: 0.04em; color: var(--ink); opacity: 0; transform: translateY(14px); animation: loadUp 1s var(--ease) 0.2s forwards; }
-.loader__mark span { color: var(--wine); }
-.loader__bar { margin: 1.4rem auto 0; width: 200px; height: 2px; background: rgba(156,67,89,0.18); border-radius: 2px; overflow: hidden; }
-.loader__bar i { display: block; height: 100%; width: 0; background: var(--grad-wine); animation: loadBar 1.6s var(--ease) 0.2s forwards; }
-.loader__sub { margin-top: 1.1rem; font-size: 0.72rem; letter-spacing: 0.34em; text-transform: uppercase; color: var(--txt-faint); opacity: 0; animation: loadUp 1s var(--ease) 0.5s forwards; }
-@keyframes loadUp { to { opacity: 1; transform: none; } }
-@keyframes loadBar { to { width: 100%; } }
+/* 05. LOADING SCREEN: removida.
+   Era uma tela de bloqueio sobre uma página estática: escondia a headline e o
+   CTA por até 2,5s na primeira visita, exatamente onde a taxa de abandono é
+   maior. Página estática não precisa de espera; o conteúdo já pinta primeiro. */
 
-/* 06. CURSOR CUSTOMIZADO — removido.
+/* 06. CURSOR CUSTOMIZADO: removido.
    Escondia o cursor nativo (body{cursor:none}) e apagava a affordance de
    "clicável" em botões e no FAQ; se o JS falhasse, a página ficava sem
    cursor nenhum. Custo de acessibilidade maior que o ganho estético. */
@@ -277,6 +299,8 @@ body.menu-open { overflow: hidden; }
 .btn--primary::before { content: ''; position: absolute; inset: 0; z-index: -1; background: var(--grad-wine); opacity: 0; transition: opacity .45s; }
 .btn--primary:hover { transform: translateY(-3px); box-shadow: 0 22px 50px -14px rgba(156,67,89,0.65); }
 .btn--primary:hover::before { opacity: 1; }
+/* feedback de pressão: sem ele o botão parece uma imagem, não um controle */
+.btn:active { transform: translateY(0) scale(.985); transition-duration: .08s; }
 
 .btn--gold { background: var(--grad-gold); color: var(--wine-900); box-shadow: 0 16px 40px -14px rgba(231,182,129,0.7); }
 .btn--gold:hover { transform: translateY(-3px); box-shadow: 0 22px 50px -14px rgba(231,182,129,0.85); }
@@ -307,7 +331,7 @@ body.menu-open { overflow: hidden; }
   background: linear-gradient(180deg, #fdf8f2 0%, var(--cream) 55%, #f6ebdf 100%);
   color: var(--ink);
 }
-.hero::before { /* selo marca d'água — estático de propósito, girar não comunicava nada */
+.hero::before { /* selo marca d'água: estático de propósito, girar não comunicava nada */
   content: ''; position: absolute; right: -8%; top: 50%; translate: 0 -50%;
   width: 60vw; height: 60vw; max-width: 760px; max-height: 760px; z-index: 0; opacity: 0.05;
   background: url('../img/gm-simbolo-wine.png') center/contain no-repeat;
@@ -320,10 +344,13 @@ body.menu-open { overflow: hidden; }
 .hero .grad-text { display: inline-block; padding-right: 0.14em; margin-right: -0.06em; background: linear-gradient(120deg, var(--wine), var(--mauve)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
 .hero .lead { color: var(--txt-soft); }
 
-.hero__grid { position: relative; z-index: 2; display: grid; grid-template-columns: 1.12fr 0.88fr; gap: clamp(2rem, 5vw, 5rem); align-items: center; width: 100%; }
+.hero__grid { position: relative; z-index: 2; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: clamp(2rem, 4.5vw, 4.5rem); align-items: center; width: 100%; }
 .hero__content { position: relative; z-index: 2; }
-.hero h1 { margin: 0.6rem 0; font-size: clamp(1.95rem, 3.6vw, 3.1rem); }
-.hero .lead { font-size: clamp(0.98rem, 1.2vw, 1.08rem); max-width: 52ch; }
+.hero h1 { margin: 0.7rem 0 0.9rem; font-size: clamp(2.05rem, 3.9vw, 3.35rem); letter-spacing: -0.03em; line-height: 1.04; }
+.hero .lead { font-size: clamp(1rem, 1.2vw, 1.1rem); max-width: 50ch; }
+/* a 2ª frase da lead é a oferta concreta (o que é, para quem, onde) 
+   separada da 1ª, que é o gancho emocional */
+.hero .lead b { display: block; margin-top: .7rem; color: var(--txt-strong); font-weight: 500; }
 .hero h1 .line { display: block; overflow: hidden; padding-bottom: 0.08em; }
 .hero h1 .line > span { display: block; transform: translateY(110%); animation: heroLine 1.1s var(--ease) forwards; }
 .hero h1 .line:nth-child(2) > span { animation-delay: .12s; }
@@ -331,10 +358,10 @@ body.menu-open { overflow: hidden; }
 @keyframes heroLine { to { transform: translateY(0); } }
 
 .hero__intro { opacity: 0; animation: fadeUp 1s var(--ease) .5s forwards; }
-.hero__actions { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 0; opacity: 0; animation: fadeUp 1s var(--ease) .65s forwards; }
-.hero__micro { margin-top: .5rem; font-size: .82rem; line-height: 1.5; color: var(--txt-soft); opacity: 0; animation: fadeUp 1s var(--ease) .8s forwards; }
+.hero__actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.2rem; opacity: 0; animation: fadeUp 1s var(--ease) .65s forwards; }
+.hero__micro { margin-top: .75rem; font-size: .82rem; line-height: 1.55; color: var(--txt-soft); opacity: 0; animation: fadeUp 1s var(--ease) .8s forwards; }
 
-/* identidade compacta — só no mobile, onde o retrato grande sai da dobra.
+/* identidade compacta: só no mobile, onde o retrato grande sai da dobra.
    Rosto + nome + CRP na primeira tela: é o maior gatilho de confiança. */
 .hero__id { display: none; align-items: center; gap: .8rem; opacity: 0; animation: fadeUp 1s var(--ease) .35s forwards; }
 .hero__id img { width: 58px; height: 58px; border-radius: 50%; object-fit: cover; object-position: center 18%; border: 2px solid var(--ivory); box-shadow: var(--shadow-md); flex-shrink: 0; }
@@ -362,7 +389,7 @@ body.menu-open { overflow: hidden; }
 
 .hero__chip {
   position: absolute; z-index: 4; padding: 0.6rem 0.95rem; border-radius: 14px;
-  /* sem blur — o chip tem animação `floaty` infinita, e desfoque
+  /* sem blur: o chip tem animação `floaty` infinita, e desfoque
      em elemento animado é recomposto a cada frame. */
   background: rgba(255,255,255,0.93);
   border: 1px solid var(--line-strong); font-size: 0.8rem; color: var(--ink); box-shadow: var(--shadow-md); white-space: nowrap;
@@ -385,7 +412,17 @@ body.menu-open { overflow: hidden; }
 .reveal[data-delay="2"] { transition-delay: .2s; }
 .reveal[data-delay="3"] { transition-delay: .3s; }
 .reveal[data-delay="4"] { transition-delay: .4s; }
-.section-pad { padding-block: clamp(5rem, 12vw, 11rem); }
+
+/* Antes: 11rem em cima E embaixo = até 352px de vazio entre seções, o que
+   quebra o embalo da rolagem numa página cujo objetivo é levar ao CTA. */
+.section-pad { padding-block: var(--sec-top) var(--sec-bottom); }
+
+/* Ritmo de superfície: seções alternadas ganham um tom levemente mais quente
+   em vez de todas serem o mesmo creme. É variação dentro da mesma paleta,
+   não um bloco escuro solto no meio da página. */
+.section--tint {
+  background: linear-gradient(180deg, transparent, rgba(239,226,210,.55) 12%, rgba(239,226,210,.55) 88%, transparent);
+}
 
 /* =====================================================================
    11. SOBRE
@@ -411,7 +448,7 @@ body.menu-open { overflow: hidden; }
 .credential span { font-size: 0.88rem; color: var(--txt-faint); }
 
 /* =====================================================================
-   12. ABORDAGEM / BENEFÍCIOS — cards 3D
+   12. ABORDAGEM / BENEFÍCIOS: cards 3D
    ===================================================================== */
 .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; }
 .card-3d {
@@ -443,29 +480,46 @@ body.menu-open { overflow: hidden; }
 /* =====================================================================
    14. CTA FINAL (seção vinho)
    ===================================================================== */
+/* O bloco de maior intenção da página era o de menor peso visual: creme sobre
+   creme, igual a todo o resto. Agora é o único bloco em vinho cheio: a cor
+   da marca, com os tokens --on-wine que já existiam e nunca eram usados.
+   Não é "uma seção escura solta": o rodapé logo abaixo segue no mesmo tom,
+   fechando a página com um bloco só. */
 .cta {
   position: relative; border-radius: var(--radius-lg); overflow: hidden;
-  padding: clamp(3rem, 8vw, 6.5rem) clamp(1.5rem, 6vw, 5rem); text-align: center;
-  background: linear-gradient(150deg, #fbeef1 0%, var(--cream-2) 60%, #f4e0e5 100%);
-  border: 1px solid var(--line-strong); box-shadow: var(--shadow-md);
+  padding: clamp(3.2rem, 7vw, 5.8rem) clamp(1.5rem, 6vw, 5rem); text-align: center;
+  background: var(--grad-wine);
+  box-shadow: 0 40px 90px -30px rgba(86, 31, 48, 0.55);
 }
-.cta::before { content: ''; position: absolute; right: -8%; top: -40%; width: 55%; height: 180%; z-index: 0; opacity: 0.06; background: url('../img/gm-simbolo-wine.png') center/contain no-repeat; }
-.cta::after { content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(700px circle at 50% -20%, rgba(188,134,147,0.22), transparent 60%); }
+.cta::before { content: ''; position: absolute; right: -6%; top: -40%; width: 55%; height: 180%; z-index: 0; opacity: 0.09; background: url('../img/gm-simbolo-branco.png') center/contain no-repeat; }
+.cta::after { content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(760px circle at 50% -25%, rgba(247,210,163,0.22), transparent 62%); }
 .cta > * { position: relative; z-index: 1; }
-.cta h2 { margin-bottom: 1.4rem; color: var(--ink); }
-.cta .eyebrow { justify-content: center; }
-.cta p { margin: 0 auto 2.4rem; color: var(--txt-soft); }
-.cta__actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+.cta h2 { margin-bottom: 1.2rem; color: var(--on-wine); }
+.cta .eyebrow { justify-content: center; color: var(--gold); }
+.cta .eyebrow::before { background: linear-gradient(90deg, transparent, var(--gold)); }
+/* era `.cta p`, que pegava TODO parágrafo do bloco e zerava o margin-top do
+   microcopy por especificidade (0-1-1 vence 0-1-0). Mira só a lead. */
+.cta .lead { margin: 0 auto; color: var(--on-wine-soft); }
+.cta__actions { display: flex; gap: .9rem; justify-content: center; flex-wrap: wrap; }
+.cta .hero__micro { color: var(--on-wine-faint); animation: none; opacity: 1; }
+/* sobre vinho o botão vinho some: o primário aqui é o dourado */
+.cta .btn--primary { background: var(--grad-gold); color: var(--wine-900); box-shadow: 0 18px 44px -14px rgba(0,0,0,.45); }
+.cta .btn--primary::before { display: none; }
+.cta .btn--primary:hover { box-shadow: 0 24px 54px -14px rgba(0,0,0,.55); }
+.cta .btn--ghost { background: rgba(255,255,255,0.08); color: var(--on-wine); border-color: var(--w-line); }
+.cta .btn--ghost:hover { background: rgba(255,255,255,0.16); border-color: var(--w-line-strong); }
 
 /* =====================================================================
    15. RODAPÉ (seção vinho)
    ===================================================================== */
-.footer { background: var(--cream-2); color: var(--txt-soft); border-top: 1px solid var(--line); padding-top: clamp(4rem, 8vw, 6rem); padding-bottom: 2.5rem; margin-top: clamp(4rem, 10vw, 8rem); }
-.footer__grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 2.5rem; margin-bottom: 3rem; }
+/* margin-top removida: somava até 128px ao padding-bottom da última seção
+   (mais 176px), abrindo ~300px de nada antes do rodapé */
+.footer { background: var(--cream-2); color: var(--txt-soft); border-top: 1px solid var(--line); padding-top: clamp(3rem, 6vw, 4.5rem); padding-bottom: 2.5rem; }
+.footer__grid { display: grid; grid-template-columns: 1.6fr 1fr 1.1fr; gap: 2rem clamp(2rem, 5vw, 4rem); margin-bottom: 2.5rem; }
 .footer .brand__name { color: var(--txt-strong); }
 .footer .brand__crp { color: var(--txt-faint); }
 .footer__brand p { color: var(--txt-soft); max-width: 34ch; margin-top: 1rem; font-size: 0.92rem; }
-.footer h4 { font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--wine); margin-bottom: 1.1rem; font-family: var(--font-body); font-weight: 600; }
+.footer h4, .footer__col h2 { font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--wine); margin-bottom: 1.1rem; font-family: var(--font-body); font-weight: 600; line-height: 1.4; }
 .footer__col a, .footer__col p { display: block; color: var(--txt-soft); padding: 0.35rem 0; font-size: 0.95rem; transition: color .3s; }
 .footer__col a:hover { color: var(--wine); }
 .socials { display: flex; gap: 0.7rem; margin-top: 1.4rem; }
@@ -490,80 +544,16 @@ body.menu-open { overflow: hidden; }
 
 @keyframes pulseRing { 0%{transform:scale(1);opacity:.7;} 100%{transform:scale(1.7);opacity:0;} }
 
-/* --- BARRA FIXA DE CTA (mobile) — substitui o FAB circular ---
+/* --- BARRA FIXA DE CTA (mobile): substitui o FAB circular ---
    Ícone sozinho é ambíguo; barra com texto diz o que acontece ao tocar.
    Resolve os ~12.000px de rolagem sem CTA no meio da página. */
 .mobile-cta {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 750; display: none;
   padding: .65rem 1rem calc(.65rem + env(safe-area-inset-bottom));
-  background: rgba(251, 244, 236, 0.97); /* opaco — blur fixo custa caro no celular */
+  background: rgba(251, 244, 236, 0.97); /* opaco: blur fixo custa caro no celular */
   border-top: 1px solid var(--line); box-shadow: 0 -8px 30px -18px rgba(86, 31, 48, 0.4);
 }
 .mobile-cta .btn { width: 100%; justify-content: center; min-height: 52px; }
-
-/* =====================================================================
-   17. RESPONSIVO
-   ===================================================================== */
-@media (max-width: 1024px) {
-  .hero__grid { grid-template-columns: 1fr; gap: 3rem; }
-  .hero__portrait { max-width: 420px; margin-inline: auto; }
-  .about__grid { grid-template-columns: 1fr; }
-  .about__media { max-width: 460px; }
-  .temas-feature { grid-template-columns: 1fr; }
-  .temas-feature__media { max-width: 460px; }
-  .space-grid { grid-template-columns: 1fr; }
-  .cards { grid-template-columns: 1fr 1fr; }
-  .topic--lg, .topic--sm, .topic--half { grid-column: span 6; }
-  .testi { grid-template-columns: 1fr; }
-  .footer__grid { grid-template-columns: 1fr 1fr; }
-}
-@media (max-width: 720px) {
-  :root { --radius: 20px; --radius-lg: 26px; }
-  .nav__links, .nav__cta { display: none; }
-  .nav__burger { display: flex; }
-  .nav__burger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-  .nav__burger.active span:nth-child(2) { opacity: 0; }
-  .nav__burger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-  .cards { grid-template-columns: 1fr; }
-  .topic { min-height: 270px; grid-column: span 12 !important; }
-  .topic--wide { flex-direction: column; align-items: flex-start; }
-  .footer__grid { grid-template-columns: 1fr; }
-  .about__quote { position: static; margin-top: 1rem; max-width: none; }
-  .scroll-hint { display: none; }
-
-  /* --- HERO MOBILE ---
-     O retrato grande empurrava o CTA e as garantias para a 2ª tela
-     (medido: retrato em 922px num viewport de 812px). Ele sai daqui e a
-     identidade volta como avatar compacto, no topo. */
-  .hero { padding-top: 4.5rem; padding-bottom: 2rem; min-height: 0; }
-  .hero__portrait { display: none; }
-  .hero__id { display: flex; }
-  .hero .eyebrow { display: none; }
-  /* a identidade fica no hero (com o rosto), não repetida na navbar:
-     no mobile a marca é só o selo */
-  .nav .brand > span { display: none; }
-  .hero h1 { font-size: clamp(1.85rem, 7.6vw, 2.15rem); margin: .8rem 0; }
-  .hero .lead { font-size: .98rem; }
-  .hero__assur { gap: .4rem; margin: 1rem 0; }
-  .hero__assur span { font-size: .76rem; padding: .38rem .7rem; }
-  .hero__actions { flex-direction: column; gap: .7rem; }
-  .hero__actions .btn { width: 100%; justify-content: center; }
-
-  /* barra fixa substitui o FAB circular */
-  .mobile-cta { display: block; }
-  .wa-float { display: none; }
-  body { padding-bottom: 76px; }
-
-  .inline-cta { flex-direction: column; align-items: stretch; text-align: center; padding: 1.4rem 1.2rem; }
-  .inline-cta .btn { justify-content: center; }
-
-  /* alvos de toque >= 44px (WCAG 2.5.5) */
-  .needs-note .reads a { display: inline-flex; align-items: center; min-height: 44px; }
-  .nav__burger { padding: 14px 10px; }
-  .footer__col a { padding: .72rem 0; }
-  .footer__bottom a { display: inline-block; padding: .85rem 0; }
-  .socials a { width: 46px; height: 46px; }
-}
 
 /* =====================================================================
    18. ACESSIBILIDADE & PERFORMANCE
@@ -577,14 +567,14 @@ body.menu-open { overflow: hidden; }
 .mobile-cta a:focus-visible { outline-offset: -3px; }
 
 /* =====================================================================
-   19. COMPONENTES — demandas · processo · confiança · FAQ
+   19. COMPONENTES: demandas · processo · confiança · FAQ
    ===================================================================== */
 
 /* intro de seção (texto corrido acolhedor) */
 .section-intro { max-width: 760px; margin-bottom: clamp(2.2rem, 5vw, 3.4rem); }
 .section-intro p { color: var(--txt-soft); margin-top: 1rem; }
 
-/* garantias do hero — fatos verificáveis, não adjetivos.
+/* garantias do hero: fatos verificáveis, não adjetivos.
    Ficam ANTES dos botões: prova precisa ser lida junto com a ação. */
 .hero__assur { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.8rem 0; opacity: 0; animation: fadeUp 1s var(--ease) .75s forwards; }
 .hero__assur span { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.4rem 0.82rem; border-radius: 100px; background: rgba(255,255,255,0.6); border: 1px solid var(--line); font-size: 0.8rem; color: var(--ink); }
@@ -601,45 +591,102 @@ body.menu-open { overflow: hidden; }
 .inline-cta svg { width: 18px; height: 18px; }
 
 /* --- INFORMAÇÕES PRÁTICAS (reaproveita o grid .trust) --- */
-.practical { grid-template-columns: repeat(3, 1fr); gap: 0.4rem 2.5rem; }
-.practical .trust__item span { color: var(--txt-soft); }
+/* 2 colunas, nao 3: com textos deste tamanho, tres colunas davam ~5
+   palavras por linha. Herda o grid de .trust e so ajusta o respiro. */
+.practical { gap: 0.2rem clamp(1.5rem, 4vw, 3.5rem); }
 .pending { color: var(--wine); font-weight: 600; }
 
-/* --- DEMANDAS / "você se reconhece?" --- */
-.needs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; }
-.need {
-  padding: 1.7rem 1.5rem; border-radius: var(--radius); background: var(--card);
-  border: 1px solid var(--line); box-shadow: var(--shadow-sm);
-  transition: transform .5s var(--ease), border-color .5s, box-shadow .5s;
+/* --- BARRA DE CREDIBILIDADE (logo abaixo da dobra) ---
+   Só fatos verificáveis: registro, formação, conformidade. Sem número
+   inventado e sem depoimento fabricado. */
+.proof-bar { border-block: 1px solid var(--line); background: rgba(255,255,255,.45); }
+.proof-bar .wrap { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem clamp(1.5rem, 4vw, 3.5rem); padding-block: clamp(1.5rem, 3vw, 2.2rem); }
+.proof {
+  display: grid; grid-template-columns: 22px 1fr; gap: 0 .8rem; align-items: center;
+  font-size: .88rem; color: var(--txt-soft); line-height: 1.4;
 }
-.need:hover { transform: translateY(-5px); border-color: var(--line-strong); box-shadow: var(--shadow-md); }
-.need__icon { width: 46px; height: 46px; border-radius: 13px; display: grid; place-items: center; background: linear-gradient(140deg, rgba(156,67,89,0.1), rgba(247,210,163,0.18)); border: 1px solid var(--line); color: var(--wine); margin-bottom: 1.1rem; }
-.need__icon svg { width: 23px; height: 23px; }
-.need h3 { font-size: 1.08rem; margin-bottom: 0.4rem; color: var(--ink); }
+.proof svg { width: 22px; height: 22px; color: var(--wine); }
+.proof b { display: block; color: var(--txt-strong); font-weight: 600; font-size: .93rem; }
+.proof a { color: var(--wine); text-decoration: underline; text-underline-offset: 3px; }
+
+/* --- DEMANDAS / "você se reconhece?" ---
+   Eram 8 cards brancos com borda e sombra: o mesmo desenho das outras três
+   seções, e ~1.400px de rolagem no celular. Viraram uma lista de ícone+texto
+   em duas colunas, com o ícone alinhado ao texto. Sem caixa, sem sombra:
+   a elevação aqui não comunicava hierarquia nenhuma. */
+.needs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .2rem clamp(2rem, 5vw, 4rem); }
+.need {
+  display: grid; grid-template-columns: 42px 1fr; gap: 0 1rem; align-items: start;
+  padding: 1.3rem 0; border-top: 1px solid var(--line);
+  transition: border-color .4s;
+}
+.need:hover { border-color: var(--line-strong); }
+.need__icon {
+  grid-row: span 2; width: 42px; height: 42px; border-radius: 12px;
+  display: grid; place-items: center; color: var(--wine);
+  background: linear-gradient(140deg, rgba(156,67,89,0.09), rgba(247,210,163,0.2));
+  transition: background .4s, color .4s;
+}
+.need:hover .need__icon { background: var(--wine); color: var(--gold); }
+.need__icon svg { width: 21px; height: 21px; }
+.need h3 { font-size: 1.02rem; margin: .1rem 0 .3rem; color: var(--ink); letter-spacing: -.01em; }
 .need p { font-size: 0.9rem; color: var(--txt-soft); line-height: 1.55; }
-.needs-note { margin-top: 2rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1.2rem; color: var(--txt-soft); }
+.needs-note { margin-top: 2.2rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1.2rem; color: var(--txt-soft); font-size: .94rem; }
 .needs-note .reads { display: inline-flex; flex-wrap: wrap; gap: 0.4rem 1rem; }
 .needs-note .reads a { color: var(--wine); font-weight: 500; }
 .needs-note .reads a:hover { text-decoration: underline; }
 
-/* --- PROCESSO (como funciona) --- */
-.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; }
-.step {
-  position: relative; padding: 1.9rem 1.6rem; border-radius: var(--radius);
-  background: var(--card); border: 1px solid var(--line); box-shadow: var(--shadow-sm);
+/* --- PROCESSO (como funciona) ---
+   Linha do tempo em vez de 4 caixas soltas: o fio contínuo comunica
+   "um caminho", quatro cards comunicavam "quatro produtos".
+
+   O padrão é VERTICAL porque funciona em qualquer largura de container 
+   nas páginas de artigo os passos vivem dentro de uma coluna de 760px, onde
+   4 colunas davam ~150px cada e quebravam o texto em duas palavras por linha.
+   A variante em linha (.steps--row) é opt-in, só onde há largura de sobra. */
+.steps { display: grid; gap: 0; }
+.step { position: relative; padding: 0 0 1.7rem 3.3rem; }
+.step::before { /* o fio */
+  content: ''; position: absolute; left: 19px; top: 40px; bottom: 0; width: 1px;
+  background: var(--line-strong);
 }
-.step__n { font-family: var(--font-display); font-size: 1.05rem; font-weight: 600; color: var(--wine); display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line-strong); margin-bottom: 1.1rem; }
-.step h3 { font-size: 1.12rem; margin-bottom: 0.5rem; color: var(--ink); }
-.step p { font-size: 0.92rem; color: var(--txt-soft); }
+.step:last-child::before { background: linear-gradient(180deg, var(--line-strong), transparent); }
+.step:last-child { padding-bottom: 0; }
+.step__n {
+  position: absolute; left: 0; top: 0; margin: 0;
+  font-family: var(--font-display); font-size: .95rem; font-weight: 600; color: var(--on-wine);
+  display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%;
+  background: var(--wine); border: 4px solid var(--cream); box-shadow: var(--glow-wine);
+}
+.step h3 { font-size: 1.08rem; margin-bottom: 0.4rem; color: var(--ink); letter-spacing: -.01em; }
+.step p { font-size: 0.94rem; color: var(--txt-soft); }
 
-.process-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(2rem, 5vw, 4rem); align-items: center; margin-top: clamp(2.5rem, 5vw, 3.5rem); }
+/* variante horizontal: usada na home, onde o container tem 1240px */
+@media (min-width: 860px) {
+  .steps--row { grid-template-columns: repeat(4, 1fr); gap: clamp(1.2rem, 2.5vw, 2rem); }
+  .steps--row .step { padding: 3.4rem 0 0; }
+  .steps--row .step::before {
+    left: 0; right: calc(-1 * clamp(1.2rem, 2.5vw, 2rem)); top: 20px;
+    bottom: auto; width: auto; height: 1px;
+    background: var(--line-strong);
+  }
+  .steps--row .step:last-child::before { right: 0; background: linear-gradient(90deg, var(--line-strong), transparent); }
+  .steps--row .step p { max-width: 34ch; }
+}
 
-/* --- CONFIANÇA / ética --- */
-.trust { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.4rem 2rem; }
-.trust__item { display: flex; gap: 0.9rem; align-items: flex-start; padding: 0.9rem 0; border-top: 1px solid var(--line); }
-.trust__item svg { width: 22px; height: 22px; color: var(--wine); flex-shrink: 0; margin-top: 2px; }
-.trust__item b { color: var(--txt-strong); font-weight: 600; display: block; }
-.trust__item span { font-size: 0.88rem; color: var(--txt-faint); }
+.process-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(2rem, 5vw, 4rem); align-items: center; margin-top: clamp(2.5rem, 5vw, 4rem); }
+
+/* --- CONFIANÇA / ética + informações práticas ---
+   Uma seção só. Antes eram duas listas (.trust em "Atendimento" e .practical
+   em "Informações práticas") repetindo sigilo, modalidade e duração. */
+.trust { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.2rem clamp(1.5rem, 4vw, 3.5rem); }
+.trust__item { display: grid; grid-template-columns: 24px 1fr; gap: 0 .85rem; align-items: start; padding: 1.05rem 0; border-top: 1px solid var(--line); }
+.trust__item svg { grid-row: span 2; width: 22px; height: 22px; color: var(--wine); margin-top: 3px; }
+.trust__item b { color: var(--txt-strong); font-weight: 600; display: block; margin-bottom: .12rem; }
+.trust__item span { font-size: 0.89rem; color: var(--txt-soft); line-height: 1.55; }
+/* item de destaque: o que a pessoa mais quer saber antes de mandar mensagem */
+.trust__item--key { border-top-color: var(--line-strong); }
+.trust__item--key b { color: var(--wine); }
 
 /* --- FAQ (nativo, acessível) --- */
 .faq { display: grid; gap: 0.9rem; max-width: 840px; margin-inline: auto; }
@@ -653,12 +700,348 @@ body.menu-open { overflow: hidden; }
 @media (hover: none) { .faq summary { cursor: pointer; } }
 
 @media (max-width: 1024px) {
-  .needs { grid-template-columns: repeat(2, 1fr); }
-  .steps { grid-template-columns: repeat(2, 1fr); }
   .process-grid { grid-template-columns: 1fr; }
   .trust { grid-template-columns: 1fr; }
 }
-@media (max-width: 560px) {
-  .needs { grid-template-columns: 1fr; }
-  .steps { grid-template-columns: 1fr; }
+
+/* =====================================================================
+   20. AJUSTES DA REPAGINAÇÃO: utilitários novos
+   ===================================================================== */
+.section-head--center { text-align: center; margin-inline: auto; }
+.section-head--center .eyebrow { justify-content: center; }
+.section-head--center .lead { margin-inline: auto; }
+
+/* título de subseção: antes era .display-2 com font-size inline */
+.h-md { font-family: var(--font-display); font-size: clamp(1.6rem, 2.8vw, 2.1rem); letter-spacing: -.02em; line-height: 1.12; margin-bottom: .9rem; color: var(--txt-strong); }
+
+.link-inline { color: var(--wine); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.link-inline:hover { text-decoration-thickness: 2px; }
+
+.space-text__note { margin-top: 1.4rem; padding-top: 1.1rem; border-top: 1px solid var(--line); font-size: .86rem; color: var(--txt-faint); letter-spacing: .02em; }
+
+/* =====================================================================
+   21. FIBRAS DO HERO (porte vanilla do GhostFibers)
+   Sem React e sem build no projeto: o efeito é um shader WebGL de ~90
+   linhas em assets/js/fibers.js, desenhado num <canvas> dentro do hero.
+   Paleta da marca: linhas vinho/mauve sobre creme, não neon sobre preto.
+   ===================================================================== */
+.fibers {
+  position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%;
+  pointer-events: none; opacity: 0;
+  /* só aparece depois que o shader compila; se o WebGL falhar, fica em 0
+     e o hero continua exatamente como era */
+  transition: opacity 1.2s var(--ease);
+  mask-image: radial-gradient(120% 100% at 70% 40%, #000 25%, transparent 78%);
 }
+.fibers.on { opacity: .34; }
+@media (prefers-reduced-motion: reduce) { .fibers { display: none; } }
+
+/* =====================================================================
+   22. BORDA VIVA NOS CARDS (porte vanilla do BorderGlow)
+   O JS escreve --edge-proximity e --cursor-angle; o resto é máscara
+   cônica em CSS, igual ao original. Adaptado para superfície CLARA:
+   o brilho é vinho/dourado por cima do marfim, não branco sobre #120F17.
+   ===================================================================== */
+.glow-card {
+  --edge-proximity: 0;
+  --cursor-angle: 45deg;
+  --edge-sens: 28;
+  position: relative; isolation: isolate;
+  transform: translate3d(0, 0, .01px);
+}
+.glow-card::after {
+  content: ''; position: absolute; inset: -1px; border-radius: inherit;
+  pointer-events: none; z-index: 2;
+  border: 1px solid transparent;
+  background:
+    conic-gradient(from 210deg, var(--wine), var(--gold-deep) 30%, var(--mauve) 55%, var(--wine) 80%, var(--wine))
+    border-box;
+  -webkit-mask:
+    linear-gradient(#000 0 0) padding-box exclude,
+    linear-gradient(#000 0 0) border-box;
+  mask:
+    linear-gradient(#000 0 0) padding-box,
+    linear-gradient(#000 0 0) border-box;
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  /* o cone segue o ponteiro: só o trecho de borda mais próximo acende */
+  opacity: calc((var(--edge-proximity) - var(--edge-sens)) / (100 - var(--edge-sens)));
+  transition: opacity .3s ease-out;
+}
+.glow-card::before {
+  content: ''; position: absolute; inset: -14px; border-radius: inherit;
+  pointer-events: none; z-index: -1;
+  box-shadow: 0 0 24px 2px rgba(156, 67, 89, .28), 0 0 60px 6px rgba(231, 182, 129, .18);
+  -webkit-mask-image: conic-gradient(from var(--cursor-angle) at center, #000 3%, transparent 12%, transparent 88%, #000 97%);
+  mask-image: conic-gradient(from var(--cursor-angle) at center, #000 3%, transparent 12%, transparent 88%, #000 97%);
+  opacity: calc((var(--edge-proximity) - var(--edge-sens)) / (100 - var(--edge-sens)));
+  transition: opacity .35s ease-out;
+}
+/* sem ponteiro (toque) o efeito nunca dispara: nada a esconder, mas evita
+   pintar duas camadas extras à toa */
+@media (hover: none) { .glow-card::before, .glow-card::after { display: none; } }
+
+/* =====================================================================
+   23. DOCK DE NAVEGAÇÃO (porte vanilla do Dock do React Bits)
+   Sem motion/framer: a ampliação é uma transform escalada por distância
+   do ponteiro, escrita num rAF. Só desktop: no celular quem manda é a
+   barra fixa de CTA, e dois elementos fixos disputando o polegar é ruim.
+   ===================================================================== */
+.dock {
+  position: fixed; left: 50%; bottom: 1.25rem; translate: -50% 0; z-index: var(--z-bar);
+  display: none; align-items: flex-end; gap: .45rem;
+  padding: .5rem .6rem; border-radius: 20px;
+  background: rgba(251, 244, 236, .92);
+  border: 1px solid var(--line-strong); box-shadow: var(--shadow-md);
+  opacity: 0; transform: translateY(14px); pointer-events: none;
+  transition: opacity .45s var(--ease), transform .45s var(--ease);
+}
+.dock.on { opacity: 1; transform: none; pointer-events: auto; }
+@media (min-width: 900px) and (hover: hover) { .dock { display: flex; } }
+
+.dock__item {
+  --s: 44px;
+  position: relative; flex: 0 0 auto;
+  width: var(--s); height: var(--s); border-radius: 13px;
+  display: grid; place-items: center;
+  background: var(--ivory); border: 1px solid var(--line); color: var(--wine);
+  transition: background .3s, color .3s, border-color .3s;
+}
+.dock__item svg { width: 45%; height: 45%; }
+.dock__item:hover { background: var(--wine); border-color: var(--wine); color: var(--gold); }
+.dock__item--cta { background: var(--wine); border-color: var(--wine); color: var(--on-wine); box-shadow: var(--glow-wine); }
+.dock__item--cta:hover { background: var(--wine-800); color: var(--gold); }
+.dock__item[aria-current="true"] { border-color: var(--wine); box-shadow: inset 0 0 0 1px var(--wine); }
+
+.dock__label {
+  position: absolute; bottom: calc(100% + 10px); left: 50%; translate: -50% 4px;
+  padding: .3rem .65rem; border-radius: 8px; white-space: nowrap;
+  background: var(--wine-900); color: var(--on-wine); font-size: .76rem; font-weight: 500;
+  opacity: 0; pointer-events: none; transition: opacity .2s, translate .2s var(--ease);
+}
+.dock__item:hover .dock__label, .dock__item:focus-visible .dock__label { opacity: 1; translate: -50% 0; }
+
+@media (prefers-reduced-motion: reduce) { .dock__item { --s: 44px !important; } }
+
+/* onde o dock aparece, ele já carrega o botão do WhatsApp: dois flutuantes
+   com o mesmo destino é ruído, não redundância útil */
+@media (min-width: 900px) and (hover: hover) { .wa-float { display: none; } }
+
+/* os dois CTAs do hero somavam 1px a mais que a coluna e quebravam linha,
+   empurrando a prova e o microcopy para fora da primeira tela */
+.hero__actions .btn--lg { padding-inline: 1.9rem; }
+/* dentro do media query: solto no fim do arquivo, este seletor ganhava do
+   `grid-template-columns: 1fr` do bloco <=1024px por ordem de origem, e o
+   hero do celular virava uma coluna de ~160px com duas palavras por linha */
+@media (min-width: 1025px) { .hero__grid { grid-template-columns: 1.16fr 0.84fr; } }
+
+/* --- limpeza do hero após entrarem as fibras ---
+   O selo marca d'água (.hero::before) e as fibras disputavam a mesma área
+   à direita: duas texturas de fundo brigando atrás do retrato. As fibras
+   ficam; o selo sai. */
+.hero::before { display: none; }
+
+/* "Role com calma" colidia com o microcopy do CTA e não dizia nada que a
+   pessoa já não soubesse fazer. */
+.scroll-hint { display: none; }
+
+/* 4 pílulas quebravam para duas linhas em 1280px e empurravam o CTA.
+   Escopado em min-width para não anular o ajuste menor do bloco mobile. */
+@media (min-width: 721px) {
+  .hero__assur { gap: .45rem; }
+  .hero__assur span { padding: .38rem .78rem; font-size: .79rem; }
+}
+
+@media (max-width: 720px) {
+  /* "Falar com a Giselle no WhatsApp" quebrava em duas linhas dentro do
+     botão do hero e virava uma pílula de 80px de altura */
+  .hero__actions .btn--lg { padding: 1rem 1.2rem; font-size: .97rem; }
+  .cta__actions .btn--lg { padding: 1rem 1.2rem; font-size: .97rem; }
+}
+
+/* =====================================================================
+   RESPONSIVO: movido para o FIM do arquivo, de propósito.
+
+   Ele vivia na seção 17, antes das seções 19+ ("componentes"). Como as
+   regras base de .needs, .steps, .trust e .faq nascem depois e têm a mesma
+   especificidade, elas venciam por ordem de origem e os ajustes de celular
+   simplesmente não aplicavam: daí os grids de 2 colunas persistindo em
+   390px, com duas palavras por linha. Era a causa de boa parte do "mobile
+   não tá legal", e não um seletor errado aqui ou ali.
+
+   Regra de manutenção: media query de layout entra AQUI, no fim.
+   ===================================================================== */
+/* =====================================================================
+   17. RESPONSIVO
+   ===================================================================== */
+@media (max-width: 1024px) {
+  .hero__grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .hero__portrait { max-width: 400px; margin-inline: auto; }
+  .about__grid { grid-template-columns: 1fr; }
+  /* o card de citação era absoluto e vazava do container reduzido */
+  .about__media { max-width: 460px; margin-bottom: 1.5rem; }
+  .space-grid { grid-template-columns: 1fr; }
+  .cards { grid-template-columns: 1fr 1fr; }
+  .footer__grid { grid-template-columns: 1fr 1fr; }
+  .proof-bar .wrap { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 860px) {
+  .practical { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 720px) {
+  :root { --radius: 20px; --radius-lg: 26px; --radius-sm: 12px; }
+  .nav__burger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav__burger.active span:nth-child(2) { opacity: 0; }
+  .nav__burger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .cards { grid-template-columns: 1fr; gap: 1rem; }
+  .footer__grid { grid-template-columns: 1fr; gap: 2.2rem; }
+  .about__quote { position: static; margin-top: 1rem; max-width: none; }
+  .scroll-hint { display: none; }
+
+  /* menu de tela cheia precisa rolar: 7 itens grandes não cabem em
+     celular pequeno nem em paisagem */
+  .mobile-menu { justify-content: flex-start; padding: 6rem 1.5rem 3rem; overflow-y: auto; }
+
+  /* --- HERO MOBILE ---
+     O retrato grande empurrava o CTA e as garantias para a 2ª tela
+     (medido: retrato em 922px num viewport de 812px). Ele sai daqui e a
+     identidade volta como avatar compacto, no topo. */
+  .hero { padding-top: 4.75rem; padding-bottom: 2.5rem; min-height: 0; }
+  .hero__portrait { display: none; }
+  .hero__id { display: flex; }
+  .hero .eyebrow { display: none; }
+  /* a identidade fica no hero (com o rosto), não repetida na navbar:
+     no mobile a marca é só o selo */
+  .nav .brand > span { display: none; }
+  .hero h1 { font-size: clamp(2rem, 8.4vw, 2.5rem); margin: .85rem 0 .7rem; }
+  .hero .lead { font-size: .98rem; }
+  .hero .lead b { margin-top: .55rem; }
+  .hero__assur { gap: .4rem; margin: 1rem 0 0; }
+  .hero__assur span { font-size: .75rem; padding: .34rem .68rem; }
+  .hero__actions { flex-direction: column; gap: .6rem; margin-top: 1.1rem; }
+  .hero__actions .btn { width: 100%; justify-content: center; }
+
+  /* barra fixa substitui o FAB circular. A altura vem de uma variável para
+     o padding do body bater com a barra real: antes era 76px fixo e o
+     último elemento ficava por baixo em aparelhos com barra de gestos. */
+  .mobile-cta { display: block; }
+  .wa-float { display: none; }
+  body { padding-bottom: calc(var(--bar-h) + env(safe-area-inset-bottom)); }
+
+  .inline-cta { flex-direction: column; align-items: stretch; text-align: left; padding: 1.4rem 1.3rem; gap: 1.1rem; }
+  .inline-cta .btn { justify-content: center; }
+
+  /* UMA coluna com o ícone ao lado do texto.
+     Duas colunas num celular de 390px dão ~150px de coluna, e a descrição
+     desce em duas palavras por linha: fica ilegível e ocupa mais altura do
+     que a coluna única que ela deveria economizar. */
+  .needs { grid-template-columns: 1fr; gap: 0; }
+  .need { grid-template-columns: 36px 1fr; gap: 0 .9rem; padding: 1rem 0; }
+  .need__icon { grid-row: span 2; width: 36px; height: 36px; border-radius: 10px; }
+  .need__icon svg { width: 19px; height: 19px; }
+  .need h3 { font-size: .97rem; margin: 0 0 .2rem; }
+  .need p { font-size: .87rem; }
+
+  .trust, .practical { grid-template-columns: 1fr; }
+  .proof-bar .wrap { grid-template-columns: 1fr; gap: .2rem; }
+  .proof { padding: .7rem 0; border-top: 1px solid var(--line); }
+  .proof-bar .proof:first-child { border-top: 0; }
+
+  .space-gallery { max-width: none; }
+  .cta__actions .btn { width: 100%; justify-content: center; }
+
+  /* alvos de toque >= 44px (WCAG 2.5.5) */
+  .needs-note .reads a { display: inline-flex; align-items: center; min-height: 44px; }
+  .nav__burger { padding: 14px 10px; }
+  .footer__col a { padding: .72rem 0; }
+  .footer__bottom a { display: inline-block; padding: .85rem 0; }
+  .socials a { width: 46px; height: 46px; }
+}
+/* faixa de tablet estreito: cabe duas colunas sem espremer a linha */
+@media (min-width: 560px) and (max-width: 720px) {
+  .needs { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 2rem; }
+}
+
+/* =====================================================================
+   24. NAVBAR: folga garantida entre o menu e o CTA
+   Com `justify-content: space-between` e três filhos, a folga entre eles é
+   o que SOBRA da largura. Quando o menu de 5 itens + o botão preenchiam a
+   linha, o que sobrava era 0 e "Dúvidas" encostava no botão do WhatsApp.
+   `gap` é um piso: o espaçamento passa a ser garantido, não residual.
+   ===================================================================== */
+.nav { gap: clamp(1.25rem, 3vw, 2.5rem); }
+.nav .brand { flex-shrink: 0; }
+.nav__cta { flex-shrink: 0; white-space: nowrap; }
+.nav__links { flex-shrink: 0; }
+
+/* 5 links × 2rem de padding eram 10rem gastos só em respiro interno,
+   justamente o que faltava entre o último link e o botão */
+.nav__link { padding: 0.6rem 0.7rem; white-space: nowrap; }
+.nav__link::after { left: 0.7rem; right: 0.7rem; }
+
+/* =====================================================================
+   25. CTA FINAL: respiro entre botões e microcopy
+   O microcopy usava .hero__micro emprestado do hero. Dentro do bloco,
+   `.cta p` (0-1-1) vence `.hero__micro` (0-1-0) e zerava o margin-top:
+   a linha "Sem compromisso · sigilo..." colava no botão, gap 0px.
+   Classe própria resolve na origem, sem !important.
+   ===================================================================== */
+.cta__micro {
+  margin-top: 1.5rem; font-size: .82rem; line-height: 1.5;
+  color: var(--on-wine-faint);
+}
+.cta__actions { margin-top: 2.4rem; }
+
+/* a sombra do botão dourado subia por baixo do parágrafo e o borrava 
+   escurecida para baixo, não para todos os lados */
+.cta .btn--primary { box-shadow: 0 14px 30px -12px rgba(0, 0, 0, .5); }
+.cta .btn--primary:hover { box-shadow: 0 20px 40px -12px rgba(0, 0, 0, .55); }
+
+/* o selo marca d'água cruzava a headline: "PSICOLOGIA E NEUROPSICOLOGIA"
+   ficava legível por cima do texto principal do bloco de maior intenção */
+.cta::before { right: -14%; opacity: .055; }
+
+/* =====================================================================
+   26. DESEMPENHO DE ROLAGEM
+   ===================================================================== */
+
+/* As duas camadas do brilho de borda carregam box-shadow grande + máscara
+   cônica. Existiam em 10 cards o tempo todo, mesmo em opacity 0: o
+   compositor ainda reserva e pinta a camada. Agora só existem sob o
+   ponteiro, que é o único momento em que o efeito pode aparecer. */
+.glow-card::before, .glow-card::after { display: none; }
+.glow-card:hover::before, .glow-card:hover::after { display: block; }
+
+/* `will-change` permanente promove a camada para sempre e cobra memória de
+   GPU em troca de nada: a animação `drift` já é transform puro (o
+   compositor promove sozinho enquanto ela roda) e o zoom de .about__photo
+   só acontece no hover. */
+.orb { will-change: auto; }
+.about__photo { will-change: auto; }
+.about__media:hover .about__photo { will-change: transform; }
+
+/* A imagem do canvas é esticada de 55% para 100%: interpolação suave em vez
+   de pixels duros nas fibras. */
+.fibers { image-rendering: auto; }
+
+/* =====================================================================
+   27. NAVBAR: ponto de troca para o hamburguer
+   Marca (~215px) + 5 links (~505px) + botão (~193px) + respiro exigem
+   ~1080px. Abaixo disso os rótulos quebravam no meio ("Quando / buscar")
+   e a barra virava duas linhas. O hamburguer sobe para 1080px: melhor um
+   menu escondido que um menu ilegível.
+   ===================================================================== */
+@media (max-width: 1080px) {
+  .nav__links, .nav__cta { display: none; }
+  .nav__burger { display: flex; }
+}
+
+/* o hero centrado numa viewport alta e estreita abria ~200px de vazio
+   embaixo; a altura para de crescer onde o conteúdo já respira */
+.hero { min-height: min(100svh, 860px); }
+
+/* Colapso medido da navbar: o JS liga esta classe quando marca + links +
+   botao nao cabem na largura real da barra. A media query de 1080px acima
+   continua valendo como rede de seguranca para quem estiver sem JS. */
+.nav--compact .nav__links, .nav--compact .nav__cta { display: none; }
+.nav--compact .nav__burger { display: flex; }

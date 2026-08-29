@@ -2,7 +2,7 @@
    GISELLE MARTINS · medição de conversão (GA4)
    Um único listener delegado cobre o site inteiro, inclusive elementos
    inseridos depois. Cada evento existe para responder uma pergunta de
-   negócio — nada de evento decorativo.
+   negócio: nada de evento decorativo.
 
    Eventos: wa_click · email_click · instagram_click · phone_reveal
             scroll_50 · scroll_90 · faq_open
@@ -45,7 +45,7 @@
     else if (href.includes('instagram.com')) send('instagram_click', a);
   }, true);
 
-  /* profundidade de leitura — proxy de qualidade de tráfego */
+  /* profundidade de leitura: proxy de qualidade de tráfego */
   const marks = { 50: false, 90: false };
   const onScroll = () => {
     const h = document.body.scrollHeight - window.innerHeight;

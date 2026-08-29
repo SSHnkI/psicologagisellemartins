@@ -1,5 +1,5 @@
 /* =====================================================================
-   ARTIGOS — herda main.css. Estilos de leitura premium.
+   ARTIGOS: herda main.css. Estilos de leitura premium.
    ===================================================================== */
 .article-hero {
   padding-top: 9rem; padding-bottom: clamp(2.5rem, 6vw, 4rem);
@@ -23,7 +23,11 @@
 .article-body .wrap { max-width: 760px; }
 .prose > * { margin-bottom: 1.5rem; }
 .prose p { font-size: 1.08rem; color: var(--txt); line-height: 1.8; }
-.prose p:first-of-type::first-letter {
+/* `>` é obrigatório: sem ele, TODO <p> que fosse o primeiro dentro do seu
+   próprio pai ganhava capitular: cada card de passo e cada callout começava
+   com uma letra gigante flutuando, quebrando o texto em duas palavras por
+   linha. A capitular é da abertura do artigo, e só dela. */
+.prose > p:first-of-type::first-letter {
   font-family: var(--font-display); font-size: 3.4rem; line-height: 0.8; float: left;
   margin: 0.35rem 0.7rem 0 0; color: var(--wine);
 }
@@ -68,8 +72,34 @@
   .breadcrumb a, .breadcrumb span { display: inline-flex; align-items: center; min-height: 44px; }
   .article-nav .link-arrow { min-height: 44px; align-items: center; }
   .article-nav { gap: .4rem; }
-  .prose p:first-of-type::first-letter { font-size: 2.8rem; }
+  /* mesmo `>` da regra base: sem ele, esta linha recriava a capitular em
+     TODO primeiro <p> do subárvore: era ela que enchia de letras gigantes
+     os cards de passo e os callouts, e só no celular. */
+  .prose > p:first-of-type::first-letter { font-size: 2.8rem; }
 }
 @media (max-width: 600px) {
   .symptom-grid { grid-template-columns: 1fr; }
+}
+
+/* --- retrato da página Sobre ---
+   Uma figura só dentro da coluna de leitura; não precisa de grid próprio. */
+.sobre-retrato { margin: 0 0 2.5rem; }
+.sobre-retrato img {
+  width: 100%; max-width: 380px; aspect-ratio: 4/5; object-fit: cover;
+  border-radius: var(--radius-lg); border: 1px solid var(--line);
+  box-shadow: var(--shadow-lg);
+}
+.sobre-retrato figcaption {
+  margin-top: .9rem; font-size: .82rem; letter-spacing: .04em;
+  color: var(--txt-faint);
+}
+/* a capitular é da abertura do artigo: aqui o 1º <p> vem depois da figura,
+   e uma letra gigante ao lado da foto brigaria com ela */
+.prose > figure + p:first-of-type::first-letter { font-size: inherit; float: none; margin: 0; color: inherit; font-family: inherit; }
+
+@media (min-width: 720px) {
+  /* a foto sai para a margem esquerda e o texto corre ao lado */
+  .sobre-retrato { float: left; margin: .4rem 2rem 1.5rem 0; max-width: 300px; }
+  .sobre-retrato img { max-width: 300px; }
+  .prose > h2 { clear: left; }
 }

@@ -2,50 +2,42 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://psicologagisellemartins.com.br/</loc>
-    <lastmod>2026-08-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>1.0</priority>
+    <lastmod>2026-08-29</lastmod>
+  </url>
+  <url>
+    <loc>https://psicologagisellemartins.com.br/sobre.html</loc>
+    <lastmod>2026-08-29</lastmod>
   </url>
   <url>
     <loc>https://psicologagisellemartins.com.br/psicologa-ansiedade-sao-paulo.html</loc>
-    <lastmod>2026-08-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
+    <lastmod>2026-08-29</lastmod>
   </url>
   <url>
     <loc>https://psicologagisellemartins.com.br/terapia-online.html</loc>
-    <lastmod>2026-08-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
+    <lastmod>2026-08-29</lastmod>
   </url>
   <url>
     <loc>https://psicologagisellemartins.com.br/artigos/ansiedade.html</loc>
-    <lastmod>2026-08-14</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.7</priority>
+    <lastmod>2026-08-29</lastmod>
   </url>
   <url>
     <loc>https://psicologagisellemartins.com.br/artigos/depressao.html</loc>
-    <lastmod>2026-08-14</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.7</priority>
+    <lastmod>2026-08-29</lastmod>
   </url>
   <url>
     <loc>https://psicologagisellemartins.com.br/artigos/sindrome-do-panico.html</loc>
-    <lastmod>2026-08-14</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.7</priority>
+    <lastmod>2026-08-29</lastmod>
+  </url>
+  <url>
+    <loc>https://psicologagisellemartins.com.br/artigos/esquizofrenia.html</loc>
+    <lastmod>2026-08-29</lastmod>
   </url>
   <url>
     <loc>https://psicologagisellemartins.com.br/artigos/desenvolvimento-humano.html</loc>
-    <lastmod>2026-08-14</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.6</priority>
+    <lastmod>2026-08-29</lastmod>
   </url>
   <url>
     <loc>https://psicologagisellemartins.com.br/politica-de-privacidade.html</loc>
-    <lastmod>2026-08-14</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
+    <lastmod>2026-08-29</lastmod>
   </url>
 </urlset>
