@@ -103,3 +103,51 @@
   .sobre-retrato img { max-width: 300px; }
   .prose > h2 { clear: left; }
 }
+
+/* =====================================================================
+   GUIAS EXPANDIDOS: componentes de leitura longa
+   ===================================================================== */
+
+/* assinatura e tempo de leitura, logo abaixo da lead */
+.article-meta { margin-top: 1.4rem; font-size: .88rem; color: var(--txt-faint); }
+.article-meta a { color: var(--wine); text-decoration: underline; text-underline-offset: 3px; }
+
+/* listas do corpo do texto: o reset global tira o marcador, entao o
+   marcador volta aqui como elemento de marca, nao como bolinha padrao */
+.prose ul { margin: 0 0 1.5rem; padding-left: 0; }
+.prose ul li {
+  position: relative; padding-left: 1.6rem; margin-bottom: .8rem;
+  font-size: 1.02rem; line-height: 1.75; color: var(--txt);
+}
+.prose ul li::before {
+  content: ''; position: absolute; left: .35rem; top: .72em;
+  width: 6px; height: 6px; border-radius: 50%; background: var(--wine);
+}
+.prose ul li b { color: var(--txt-strong); font-weight: 600; }
+.lista-sinais li::before { border-radius: 2px; background: var(--gold-deep); }
+
+/* bloco de crise: precisa ser o elemento mais visivel da pagina depois do
+   H1. Nao e' decorativo, e' seguranca de quem pode estar em risco agora. */
+.crise {
+  margin: 2.5rem 0; padding: 1.6rem 1.8rem; border-radius: var(--radius);
+  background: var(--wine); color: var(--on-wine);
+  box-shadow: var(--glow-wine);
+}
+.crise h3 { font-size: 1.15rem; margin-bottom: .6rem; color: var(--on-wine); }
+.crise p { margin: 0; color: var(--on-wine-soft); font-size: .98rem; line-height: 1.7; }
+.crise b { color: var(--gold); font-weight: 700; }
+
+/* rodape de transparencia: quem escreveu, quando, com que registro */
+.referencias {
+  margin: 2.5rem 0 0; padding-top: 1.4rem; border-top: 1px solid var(--line);
+  font-size: .88rem; color: var(--txt-faint); line-height: 1.7;
+}
+.referencias h3 {
+  font-family: var(--font-body); font-size: .78rem; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--wine); margin-bottom: .7rem;
+}
+.referencias p { margin: 0; font-size: .88rem; color: var(--txt-faint); }
+.referencias a { color: var(--wine); text-decoration: underline; text-underline-offset: 3px; }
+
+/* o FAQ nativo dentro do corpo do artigo */
+.prose .faq { margin: 1.5rem 0 2rem; }
