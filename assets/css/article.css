@@ -126,6 +126,16 @@
 .prose ul li b { color: var(--txt-strong); font-weight: 600; }
 .lista-sinais li::before { border-radius: 2px; background: var(--gold-deep); }
 
+/* .lista-comparativa era um gancho morto: eu usei a classe em tres arquivos e
+   nunca escrevi o estilo, entao ela herdava .prose ul li e ficava identica a
+   uma <ul> sem classe. Agora o marcador de fato distingue "isto contra aquilo"
+   de "sinais de alerta". */
+.lista-comparativa li::before {
+  width: 10px; height: 2px; border-radius: 1px; top: .85em;
+  background: var(--wine);
+}
+.lista-comparativa li { margin-bottom: 1rem; }
+
 /* bloco de crise: precisa ser o elemento mais visivel da pagina depois do
    H1. Nao e' decorativo, e' seguranca de quem pode estar em risco agora. */
 .crise {
