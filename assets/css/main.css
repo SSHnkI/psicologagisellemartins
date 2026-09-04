@@ -246,7 +246,6 @@ p { text-wrap: pretty; }
 .lead { font-size: clamp(1.02rem, 1.35vw, 1.2rem); color: var(--txt-soft); font-weight: 400; max-width: 58ch; line-height: 1.62; }
 
 .grad-text { background: var(--grad-text); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
-.wine-text { color: var(--wine); }
 .italic-serif { font-style: italic; }
 
 .section-head { max-width: 700px; margin-bottom: clamp(2.2rem, 4.5vw, 3.4rem); }
@@ -254,10 +253,6 @@ p { text-wrap: pretty; }
 .section-head .lead { max-width: 54ch; }
 
 /* tom sobre seções vinho */
-.on-wine, .on-wine h1, .on-wine h2, .on-wine h3, .on-wine h4 { color: var(--on-wine); }
-.on-wine .eyebrow { color: var(--gold); }
-.on-wine .eyebrow::before { background: linear-gradient(90deg, transparent, var(--gold)); }
-.on-wine .lead { color: var(--on-wine-soft); }
 
 /* =====================================================================
    04. AMBIENTE: glows quentes + grão
@@ -372,23 +367,16 @@ body.menu-open { overflow: hidden; }
 /* feedback de pressão: sem ele o botão parece uma imagem, não um controle */
 .btn:active { transform: translateY(0) scale(.985); transition-duration: .08s; }
 
-.btn--gold { background: var(--grad-gold); color: var(--wine-900); box-shadow: 0 16px 40px -14px rgba(231,182,129,0.7); }
-.btn--gold:hover { transform: translateY(-3px); box-shadow: 0 22px 50px -14px rgba(231,182,129,0.85); }
 
 .btn--ghost { background: transparent; color: var(--wine); border-color: var(--line-strong); }
 .btn--ghost:hover { border-color: var(--wine); background: rgba(156,67,89,0.06); transform: translateY(-3px); }
 /* fantasma sobre vinho */
-/* sem backdrop-filter: desfoque de fundo obriga o compositor a reler a
-   regiao atras do elemento em cada frame de rolagem. */
-.on-wine .btn--ghost, .btn--ghost-light { background: rgba(255,255,255,0.1); color: var(--on-wine); border-color: var(--w-line); }
-.on-wine .btn--ghost:hover, .btn--ghost-light:hover { background: rgba(255,255,255,0.12); border-color: var(--w-line-strong); }
 
 .btn--lg { padding: 1.15rem 2.3rem; font-size: 1.02rem; }
 
 .link-arrow { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--wine); font-weight: 600; }
 .link-arrow svg { width: 16px; transition: transform .35s var(--ease); }
 .link-arrow:hover svg { transform: translateX(5px); }
-.on-wine .link-arrow { color: var(--gold); }
 
 /* =====================================================================
    09. HERO (seção vinho)
@@ -466,7 +454,6 @@ body.menu-open { overflow: hidden; }
   background: rgba(255,255,255,0.93);
   border: 1px solid var(--line-strong); font-size: 0.8rem; color: var(--ink); box-shadow: var(--shadow-md); white-space: nowrap;
 }
-.hero__chip--1 { top: 1rem; left: 1rem; animation: floaty 5s var(--ease-soft) infinite alternate; }
 .hero__chip--2 { top: 1rem; right: 1rem; left: auto; bottom: auto; animation: floaty 6s var(--ease-soft) .6s infinite alternate-reverse; }
 .hero__chip b { color: var(--wine); }
 
@@ -501,7 +488,7 @@ body.menu-open { overflow: hidden; }
    ===================================================================== */
 .about__grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(2.5rem, 6vw, 5.5rem); align-items: center; }
 .about__media { position: relative; }
-.about__photo { border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--line); box-shadow: var(--shadow-lg); will-change: transform; }
+.about__photo { border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--line); box-shadow: var(--shadow-lg); }
 .about__photo img { width: 100%; aspect-ratio: 4/5; object-fit: cover; transition: transform 1.2s var(--ease); }
 .about__media:hover .about__photo img { transform: scale(1.05); }
 .about__quote {
@@ -522,21 +509,6 @@ body.menu-open { overflow: hidden; }
 /* =====================================================================
    12. ABORDAGEM / BENEFÍCIOS: cards 3D
    ===================================================================== */
-.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; }
-.card-3d {
-  position: relative; padding: 2.2rem 2rem; border-radius: var(--radius);
-  background: var(--card); border: 1px solid var(--line); box-shadow: var(--shadow-sm);
-  overflow: hidden; transform-style: preserve-3d;
-  transition: transform .5s var(--ease), border-color .5s, box-shadow .5s; will-change: transform;
-}
-.card-3d::before { content: ''; position: absolute; inset: 0; opacity: 0; transition: opacity .5s; background: radial-gradient(420px circle at var(--mx,50%) var(--my,0%), rgba(188,134,147,0.16), transparent 60%); }
-.card-3d:hover { border-color: var(--line-strong); box-shadow: var(--shadow-md); }
-.card-3d:hover::before { opacity: 1; }
-.card-3d__icon { width: 58px; height: 58px; border-radius: 16px; display: grid; place-items: center; background: linear-gradient(140deg, rgba(156,67,89,0.1), rgba(247,210,163,0.18)); border: 1px solid var(--line); margin-bottom: 1.4rem; color: var(--wine); transform: translateZ(40px); }
-.card-3d__icon svg { width: 27px; height: 27px; }
-.card-3d h3 { font-size: 1.25rem; margin-bottom: 0.7rem; transform: translateZ(28px); }
-.card-3d p { font-size: 0.95rem; color: var(--txt-soft); transform: translateZ(18px); }
-.card-3d__num { position: absolute; top: 1.4rem; right: 1.6rem; font-family: var(--font-display); font-size: 0.9rem; color: var(--mauve); }
 
 /* =====================================================================
    13. ESPAÇO (consultório)
@@ -643,8 +615,6 @@ body.menu-open { overflow: hidden; }
    ===================================================================== */
 
 /* intro de seção (texto corrido acolhedor) */
-.section-intro { max-width: 760px; margin-bottom: clamp(2.2rem, 5vw, 3.4rem); }
-.section-intro p { color: var(--txt-soft); margin-top: 1rem; }
 
 /* garantias do hero: fatos verificáveis, não adjetivos.
    Ficam ANTES dos botões: prova precisa ser lida junto com a ação. */
@@ -666,7 +636,6 @@ body.menu-open { overflow: hidden; }
 /* 2 colunas, nao 3: com textos deste tamanho, tres colunas davam ~5
    palavras por linha. Herda o grid de .trust e so ajusta o respiro. */
 .practical { gap: 0.2rem clamp(1.5rem, 4vw, 3.5rem); }
-.pending { color: var(--wine); font-weight: 600; }
 
 /* --- BARRA DE CREDIBILIDADE (logo abaixo da dobra) ---
    Só fatos verificáveis: registro, formação, conformidade. Sem número
@@ -952,8 +921,6 @@ body.menu-open { overflow: hidden; }
   .about__grid { grid-template-columns: 1fr; }
   /* o card de citação era absoluto e vazava do container reduzido */
   .about__media { max-width: 460px; margin-bottom: 1.5rem; }
-  .space-grid { grid-template-columns: 1fr; }
-  .cards { grid-template-columns: 1fr 1fr; }
   .footer__grid { grid-template-columns: 1fr 1fr; }
   .proof-bar .wrap { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
@@ -965,7 +932,6 @@ body.menu-open { overflow: hidden; }
   .nav__burger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
   .nav__burger.active span:nth-child(2) { opacity: 0; }
   .nav__burger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-  .cards { grid-template-columns: 1fr; gap: 1rem; }
   .footer__grid { grid-template-columns: 1fr; gap: 2.2rem; }
   .about__quote { position: static; margin-top: 1rem; max-width: none; }
   .scroll-hint { display: none; }
@@ -1089,8 +1055,7 @@ body.menu-open { overflow: hidden; }
    compositor promove sozinho enquanto ela roda) e o zoom de .about__photo
    só acontece no hover. */
 .orb { will-change: auto; }
-.about__photo { will-change: auto; }
-.about__media:hover .about__photo { will-change: transform; }
+.about__media:hover .about__photo img { will-change: transform; }
 
 /* A imagem do canvas é esticada de 55% para 100%: interpolação suave em vez
    de pixels duros nas fibras. */
