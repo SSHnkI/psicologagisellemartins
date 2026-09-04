@@ -109,6 +109,19 @@
   --z-nav: 800;
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  /* --ease e' easeOutQuint: quase todo o movimento acontece no primeiro
+     terco e o resto e' assentamento. E' uma curva otima para ENTRADA, onde
+     o elemento chega e acomoda. Em hover ela mente sobre a duracao: o botao
+     parece ter chegado e continua se ajeitando por mais 250ms, e se o
+     ponteiro sai antes disso a volta comeca do meio do caminho. O resultado
+     e' a sensacao de resposta mole.
+     --ease-out abaixo comeca rapido e termina limpo, sem cauda longa. */
+  --ease-out: cubic-bezier(0.3, 0, 0.2, 1);
+  /* 160ms e' o teto do que se le como resposta imediata a um hover; acima de
+     ~250ms o olho separa a causa do efeito. As entradas e os reveals seguem
+     em 400ms a 1,2s de proposito: ali a lentidao e' a intencao. */
+  --t-hover: 160ms;
+  --t-state: 240ms;
   --ease-soft: cubic-bezier(0.16, 1, 0.3, 1);
 
   --font-display: 'Clash Display', 'Satoshi', system-ui, sans-serif;
@@ -120,7 +133,13 @@
    ===================================================================== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+/* Sem `scroll-behavior: smooth` global. Ele nao muda a rolagem por dedo ou
+   por roda, mas anima TODA rolagem programatica com uma duracao fixa de
+   ~500ms que o CSS nao deixa ajustar: barra de espaco, Home, End, setas e
+   os saltos do localizar-na-pagina passam a arrastar. As ancoras nao
+   dependem dele, o main.js chama scrollIntoView({behavior:'smooth'})
+   explicitamente, e ali a suavidade serve para nao perder a orientacao. */
+html { -webkit-text-size-adjust: 100%; }
 /* compensa a navbar fixa nas âncoras (substitui o offset que o Lenis fazia) */
 :target, section[id], main[id] { scroll-margin-top: 88px; }
 
@@ -250,7 +269,7 @@ p { text-wrap: pretty; }
   transform: translateZ(0);
   display: flex; align-items: center; justify-content: space-between;
   padding: 1.4rem var(--pad);
-  transition: padding .5s var(--ease), background .5s, border-color .5s, box-shadow .5s;
+  transition: padding var(--t-state) var(--ease-out), background var(--t-state), border-color var(--t-state), box-shadow var(--t-state);
   border-bottom: 1px solid transparent;
 }
 .nav.scrolled {
@@ -263,24 +282,24 @@ p { text-wrap: pretty; }
 }
 .brand { display: flex; align-items: center; gap: 0.75rem; }
 .brand__logo { width: 46px; height: 46px; border-radius: 50%; object-fit: cover; box-shadow: var(--glow-wine); }
-.brand__name { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; line-height: 1.05; color: var(--txt-strong); transition: color .5s; }
-.brand__crp { font-size: 0.64rem; letter-spacing: 0.18em; color: var(--txt-soft); text-transform: uppercase; transition: color .5s; }
+.brand__name { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; line-height: 1.05; color: var(--txt-strong); transition: color var(--t-state); }
+.brand__crp { font-size: 0.64rem; letter-spacing: 0.18em; color: var(--txt-soft); text-transform: uppercase; transition: color var(--t-state); }
 
 .nav__links { display: flex; align-items: center; gap: 0.35rem; }
 .nav__link { position: relative; padding: 0.6rem 1rem; font-size: 0.92rem; font-weight: 500; color: var(--txt-soft); transition: color .35s; }
-.nav__link::after { content: ''; position: absolute; left: 1rem; right: 1rem; bottom: 0.35rem; height: 1px; background: var(--wine); transform: scaleX(0); transform-origin: left; transition: transform .4s var(--ease); }
+.nav__link::after { content: ''; position: absolute; left: 1rem; right: 1rem; bottom: 0.35rem; height: 1px; background: var(--wine); transform: scaleX(0); transform-origin: left; transition: transform var(--t-state) var(--ease-out); }
 .nav__link:hover { color: var(--wine); }
 .nav__link:hover::after { transform: scaleX(1); }
 
 .nav__cta { display: inline-flex; }
 .nav__burger { display: none; flex-direction: column; gap: 5px; background: none; border: 0; padding: 8px; }
-.nav__burger span { width: 24px; height: 2px; background: var(--wine); border-radius: 2px; transition: .4s var(--ease); }
+.nav__burger span { width: 24px; height: 2px; background: var(--wine); border-radius: 2px; transition: var(--t-state) var(--ease-out); }
 
 .mobile-menu {
   position: fixed; inset: 0; z-index: 790;
   background: rgba(111, 47, 64, 0.985); /* opaco em vez de blur de tela cheia */
   display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 0.5rem;
-  opacity: 0; visibility: hidden; transition: opacity .5s var(--ease), visibility .5s;
+  opacity: 0; visibility: hidden; transition: opacity var(--t-state) var(--ease-out), visibility var(--t-state);
 }
 .mobile-menu.open { opacity: 1; visibility: visible; }
 .mobile-menu a { font-family: var(--font-display); font-size: clamp(1.6rem, 6.2vw, 2.2rem); color: var(--on-wine); padding: 0.35rem; transition: color .3s; }
@@ -299,11 +318,11 @@ body.menu-open { overflow: hidden; }
   position: relative; display: inline-flex; align-items: center; gap: 0.65rem;
   padding: 1rem 1.9rem; border-radius: 100px; font-weight: 600; font-size: 0.96rem;
   border: 1px solid transparent; overflow: hidden; isolation: isolate;
-  transition: transform .4s var(--ease), box-shadow .4s, color .4s, background .4s, border-color .4s;
+  transition: transform var(--t-hover) var(--ease-out), box-shadow var(--t-hover) var(--ease-out), color var(--t-hover) var(--ease-out), background var(--t-hover) var(--ease-out), border-color var(--t-hover) var(--ease-out);
 }
 .btn svg { width: 18px; height: 18px; }
 .btn--primary { background: var(--wine); color: var(--on-wine); box-shadow: var(--glow-wine); }
-.btn--primary::before { content: ''; position: absolute; inset: 0; z-index: -1; background: var(--grad-wine); opacity: 0; transition: opacity .45s; }
+.btn--primary::before { content: ''; position: absolute; inset: 0; z-index: -1; background: var(--grad-wine); opacity: 0; transition: opacity var(--t-hover) var(--ease-out); }
 .btn--primary:hover { transform: translateY(-3px); box-shadow: 0 22px 50px -14px rgba(156,67,89,0.65); }
 .btn--primary:hover::before { opacity: 1; }
 /* feedback de pressão: sem ele o botão parece uma imagem, não um controle */
@@ -532,7 +551,7 @@ body.menu-open { overflow: hidden; }
 .footer__col a, .footer__col p { display: block; color: var(--txt-soft); padding: 0.35rem 0; font-size: 0.95rem; transition: color .3s; }
 .footer__col a:hover { color: var(--wine); }
 .socials { display: flex; gap: 0.7rem; margin-top: 1.4rem; }
-.socials a { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; background: var(--ivory); border: 1px solid var(--line); color: var(--wine); transition: .4s var(--ease); }
+.socials a { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; background: var(--ivory); border: 1px solid var(--line); color: var(--wine); transition: var(--t-hover) var(--ease-out); }
 .socials a:hover { background: var(--wine); border-color: var(--wine); color: var(--ivory); transform: translateY(-3px); }
 .socials svg { width: 18px; height: 18px; }
 .footer__bottom { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; padding-top: 1.8rem; border-top: 1px solid var(--line); }
@@ -542,7 +561,7 @@ body.menu-open { overflow: hidden; }
 /* =====================================================================
    16. BOTÕES FLUTUANTES (WhatsApp + Instagram)
    ===================================================================== */
-.wa-float { position: fixed; right: 1.5rem; bottom: calc(1.5rem + env(safe-area-inset-bottom)); z-index: 700; width: 60px; height: 60px; border-radius: 50%; display: grid; place-items: center; background: #25D366; box-shadow: 0 12px 30px -8px rgba(37,211,102,0.6); transition: transform .4s var(--ease); }
+.wa-float { position: fixed; right: 1.5rem; bottom: calc(1.5rem + env(safe-area-inset-bottom)); z-index: 700; width: 60px; height: 60px; border-radius: 50%; display: grid; place-items: center; background: #25D366; box-shadow: 0 12px 30px -8px rgba(37,211,102,0.6); transition: transform var(--t-hover) var(--ease-out); }
 .wa-float::before { content:''; position:absolute; inset:0; border-radius:50%; border:2px solid #25D366; animation: pulseRing 2.4s infinite; }
 .wa-float:hover { transform: scale(1.08); }
 .wa-float svg { width: 32px; height: 32px; fill: #fff; }
@@ -627,14 +646,14 @@ body.menu-open { overflow: hidden; }
 .need {
   display: grid; grid-template-columns: 42px 1fr; gap: 0 1rem; align-items: start;
   padding: 1.3rem 0; border-top: 1px solid var(--line);
-  transition: border-color .4s;
+  transition: border-color var(--t-state) var(--ease-out);
 }
 .need:hover { border-color: var(--line-strong); }
 .need__icon {
   grid-row: span 2; width: 42px; height: 42px; border-radius: 12px;
   display: grid; place-items: center; color: var(--wine);
   background: linear-gradient(140deg, rgba(156,67,89,0.09), rgba(247,210,163,0.2));
-  transition: background .4s, color .4s;
+  transition: background var(--t-state) var(--ease-out), color var(--t-state) var(--ease-out);
 }
 .need:hover .need__icon { background: var(--wine); color: var(--gold); }
 .need__icon svg { width: 21px; height: 21px; }
@@ -699,11 +718,11 @@ body.menu-open { overflow: hidden; }
 
 /* --- FAQ (nativo, acessível) --- */
 .faq { display: grid; gap: 0.9rem; max-width: 840px; margin-inline: auto; }
-.faq details { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 0 1.5rem; box-shadow: var(--shadow-sm); transition: border-color .4s, box-shadow .4s; }
+.faq details { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 0 1.5rem; box-shadow: var(--shadow-sm); transition: border-color var(--t-state) var(--ease-out), box-shadow var(--t-state) var(--ease-out); }
 .faq details[open] { border-color: var(--line-strong); box-shadow: var(--shadow-md); }
 .faq summary { list-style: none; cursor: pointer; padding: 1.25rem 0; font-family: var(--font-display); font-weight: 500; font-size: 1.08rem; color: var(--ink); display: flex; justify-content: space-between; gap: 1.2rem; align-items: center; }
 .faq summary::-webkit-details-marker { display: none; }
-.faq summary::after { content: '+'; font-family: var(--font-body); font-size: 1.6rem; line-height: 1; color: var(--wine); transition: transform .4s var(--ease); }
+.faq summary::after { content: '+'; font-family: var(--font-body); font-size: 1.6rem; line-height: 1; color: var(--wine); transition: transform var(--t-state) var(--ease-out); }
 .faq details[open] summary::after { transform: rotate(45deg); }
 .faq__a { padding: 0 0 1.4rem; color: var(--txt-soft); font-size: 0.98rem; line-height: 1.75; max-width: 64ch; }
 @media (hover: none) { .faq summary { cursor: pointer; } }
@@ -803,7 +822,7 @@ body.menu-open { overflow: hidden; }
   background: rgba(251, 244, 236, .92);
   border: 1px solid var(--line-strong); box-shadow: var(--shadow-md);
   opacity: 0; transform: translateY(14px); pointer-events: none;
-  transition: opacity .45s var(--ease), transform .45s var(--ease);
+  transition: opacity var(--t-state) var(--ease-out), transform var(--t-state) var(--ease-out);
 }
 .dock.on { opacity: 1; transform: none; pointer-events: auto; }
 @media (min-width: 900px) and (hover: hover) { .dock { display: flex; } }

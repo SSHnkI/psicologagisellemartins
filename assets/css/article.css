@@ -13,7 +13,7 @@
 }
 .article-hero .wrap { max-width: 860px; }
 .breadcrumb { display: flex; gap: 0.5rem; align-items: center; font-size: 0.82rem; color: var(--txt-faint); margin-bottom: 2rem; }
-.breadcrumb a { color: var(--txt-soft); transition: color .3s; }
+.breadcrumb a { color: var(--txt-soft); transition: color var(--t-hover); }
 .breadcrumb a:hover { color: var(--wine); }
 .breadcrumb svg { width: 14px; height: 14px; }
 .article-hero h1 { font-size: clamp(2.1rem, 5.2vw, 3.6rem); margin: 1rem 0; }
@@ -46,7 +46,7 @@
 .symptom {
   display: flex; align-items: center; gap: 0.8rem; padding: 1rem 1.2rem;
   background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px;
-  font-size: 0.98rem; color: var(--txt); transition: border-color .4s, transform .4s;
+  font-size: 0.98rem; color: var(--txt); transition: border-color var(--t-hover) var(--ease-out), transform var(--t-hover) var(--ease-out);
 }
 .symptom:hover { border-color: var(--glass-border-strong); transform: translateX(4px); }
 .symptom svg { width: 18px; height: 18px; color: var(--wine); flex-shrink: 0; }
