@@ -1,4 +1,48 @@
 /* =====================================================================
+   00. FONTES, hospedadas aqui
+   Antes vinham de api.fontshare.com por <link rel="stylesheet">. Aquilo
+   custava 1,6s de bloqueio de renderizacao, e nao pelo tamanho: o CSS tem
+   1,4 KiB. O custo era a corrente. O navegador tinha que resolver DNS,
+   abrir TLS e baixar o CSS de um terceiro (780ms) so para DESCOBRIR o
+   endereco dos woff2, que estao em OUTRO host (cdn.fontshare.com), e so
+   entao comecar a baixar a fonte (mais 235ms). Tres saltos em serie antes
+   da primeira letra aparecer.
+   Servidos daqui, os arquivos estao na mesma origem e no mesmo dominio do
+   HTML: nenhuma conexao nova, nenhuma descoberta, e o <link rel="preload">
+   no <head> comeca o download junto com o main.css em vez de depois dele.
+   Satoshi nao tem peso 600 na fontshare (300, 400, 500, 700 e 900). O
+   `f[]=satoshi@600` da URL antiga nunca devolveu nada, e os font-weight:600
+   do CSS sempre resolveram para 700 pela regra de casamento de peso. Nao
+   mudei isso: manter o 700 preserva a renderizacao atual. Por isso aqui ha
+   400, 500 e 700 de Satoshi, e nao um 600 que nao existe.
+   ===================================================================== */
+@font-face {
+  font-family: 'Clash Display';
+  src: url('../fonts/clash-display-500.woff2') format('woff2');
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Clash Display';
+  src: url('../fonts/clash-display-600.woff2') format('woff2');
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Satoshi';
+  src: url('../fonts/satoshi-400.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Satoshi';
+  src: url('../fonts/satoshi-500.woff2') format('woff2');
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Satoshi';
+  src: url('../fonts/satoshi-700.woff2') format('woff2');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+
+/* =====================================================================
    GISELLE MARTINS · PSICOLOGIA E NEUROPSICOLOGIA
    Experiência acolhedora: paleta da marca (vinho · mauve · creme-dourado)
    Índice:

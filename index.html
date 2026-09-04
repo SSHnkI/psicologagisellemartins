@@ -49,9 +49,8 @@
   <meta name="twitter:description" content="Um espaço de escuta e acolhimento para atravessar a ansiedade, a sobrecarga e os conflitos internos. Terapia online e presencial em São Paulo." />
   <meta name="twitter:image" content="https://psicologagisellemartins.com.br/assets/img/giselle-hero.jpg" />
 
-  <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
-  <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
-  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600&f[]=satoshi@400,500,600,700&display=swap" />
+  <link rel="preload" href="assets/fonts/clash-display-600.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="assets/fonts/satoshi-400.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="assets/css/main.css" />
 
   <!-- TODO: CONFIRMAR COM GISELLE: assim que o endereço do consultório e os
@@ -172,7 +171,7 @@
   <!-- ============== NAV ============== -->
   <header class="nav">
     <a class="brand" href="#top" aria-label="Início">
-      <img class="brand__logo" src="assets/img/gm-badge.png" alt="Giselle Martins" width="240" height="240" />
+      <img class="brand__logo" src="assets/img/gm-badge.webp" alt="Giselle Martins" width="96" height="96" />
       <span>
         <span class="brand__name">Giselle Martins</span><br />
         <span class="brand__crp">Psicóloga · CRP 06/132.406</span>
@@ -248,7 +247,21 @@
         <div class="hero__portrait">
           <div class="hero__chip hero__chip--2"><b>Neuropsicologia</b></div>
           <div class="portrait-card">
-            <picture><source type="image/webp" srcset="assets/img/giselle-hero-420.webp 420w, assets/img/giselle-hero-900.webp 900w" sizes="(max-width: 1024px) 400px, 42vw" /><img src="assets/img/giselle-hero.jpg" alt="Giselle Martins, psicóloga clínica, em seu consultório" width="869" height="1280" loading="lazy" decoding="async" /></picture>
+            <!-- O primeiro <source> existe por causa de um comportamento do Chrome:
+                 `loading="lazy"` NAO impede o download de imagem cujo elemento
+                 esta em display:none. A postergacao depende de a imagem ter
+                 caixa de layout para observar a intersecao com a viewport; sem
+                 caixa, o navegador baixa na hora. Este retrato sai do fluxo em
+                 max-width:720px (secao 17 do main.css) e mesmo assim o arquivo
+                 de 869px vinha junto, 39 KB sem nada para mostrar.
+                 A condicao `media` resolve antes disso: abaixo de 720px o
+                 candidato escolhido e o mesmo arquivo de 160px que o avatar do
+                 topo ja baixou, ou seja, acerto de cache e zero byte novo. -->
+            <picture>
+              <source media="(max-width: 720px)" type="image/webp" srcset="assets/img/giselle-hero-160.webp" />
+              <source type="image/webp" srcset="assets/img/giselle-hero-420.webp 420w, assets/img/giselle-hero-560.webp 560w, assets/img/giselle-hero-869.webp 869w" sizes="(max-width: 1024px) 400px, 440px" />
+              <img src="assets/img/giselle-hero.jpg" alt="Giselle Martins, psicóloga clínica, em seu consultório" width="869" height="1280" loading="lazy" decoding="async" />
+            </picture>
             <div class="portrait-badge"><i></i><span>Atendimento online e presencial</span></div>
           </div>
         </div>
@@ -354,7 +367,7 @@
     <section class="section-pad" id="sobre">
       <div class="wrap about__grid">
         <div class="about__media reveal">
-          <div class="about__photo"><picture><source type="image/webp" srcset="assets/img/giselle-sobre-420.webp 420w, assets/img/giselle-sobre-760.webp 760w" sizes="(max-width: 1024px) 92vw, 40vw" /><img src="assets/img/giselle-sobre.jpg" alt="Giselle Martins, psicóloga, em seu consultório" width="995" height="1280" loading="lazy" decoding="async" /></picture></div>
+          <div class="about__photo"><picture><source type="image/webp" srcset="assets/img/giselle-sobre-420.webp 420w, assets/img/giselle-sobre-560.webp 560w, assets/img/giselle-sobre-640.webp 640w, assets/img/giselle-sobre-760.webp 760w" sizes="(max-width: 719px) 88vw, 460px" /><img src="assets/img/giselle-sobre.jpg" alt="Giselle Martins, psicóloga, em seu consultório" width="995" height="1280" loading="lazy" decoding="async" /></picture></div>
           <div class="about__quote">
             <p>“Acolher cada pessoa em sua história, com um olhar para além das imperfeições.”</p>
             <cite>O que guia o meu trabalho</cite>
@@ -566,7 +579,7 @@
       <div class="footer__grid">
         <div class="footer__brand">
           <a class="brand" href="#top">
-            <img class="brand__logo" src="assets/img/gm-badge.png" alt="Giselle Martins" width="240" height="240" loading="lazy" />
+            <img class="brand__logo" src="assets/img/gm-badge.webp" alt="Giselle Martins" width="96" height="96" loading="lazy" />
             <span><span class="brand__name">Giselle Martins</span><br /><span class="brand__crp">CRP 06/132.406</span></span>
           </a>
           <p>Psicologia clínica e neuropsicologia com escuta, acolhimento e ética. Um espaço seguro para cuidar de você, em São Paulo e online.</p>
