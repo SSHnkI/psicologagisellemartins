@@ -1045,3 +1045,9 @@ body.menu-open { overflow: hidden; }
    continua valendo como rede de seguranca para quem estiver sem JS. */
 .nav--compact .nav__links, .nav--compact .nav__cta { display: none; }
 .nav--compact .nav__burger { display: flex; }
+
+/* O <picture> que envolve as fotos entra na arvore de layout como inline e
+   quebraria regras que contam com o <img> sendo filho direto (por exemplo
+   `height: 100%` nas figuras da galeria). `display: contents` faz o wrapper
+   sumir do layout: o <img> se posiciona exatamente como antes do WebP. */
+picture { display: contents; }
