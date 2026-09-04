@@ -50,7 +50,7 @@
   --txt: #5e4a52;
   --txt-strong: #3a2730;
   --txt-soft: #6f5b63; /* darkened from #87727a, was ~4.1:1 on cream, now ~5.7:1 (WCAG AA) */
-  --txt-faint: #7d6870; /* darkened from #a99aa0, was ~2.5:1 on cream, now ~4.7:1 (WCAG AA) */
+  --txt-faint: #655259; /* 4.26:1 no rodape reprovava na WCAG AA; agora 5.99:1 la e 6.63:1 sobre o creme */
 
   /* texto sobre vinho */
   --on-wine: #fbeee4;
@@ -257,7 +257,7 @@ p { text-wrap: pretty; }
 .brand { display: flex; align-items: center; gap: 0.75rem; }
 .brand__logo { width: 46px; height: 46px; border-radius: 50%; object-fit: cover; box-shadow: var(--glow-wine); }
 .brand__name { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; line-height: 1.05; color: var(--txt-strong); transition: color .5s; }
-.brand__crp { font-size: 0.64rem; letter-spacing: 0.18em; color: var(--txt-faint); text-transform: uppercase; transition: color .5s; }
+.brand__crp { font-size: 0.64rem; letter-spacing: 0.18em; color: var(--txt-soft); text-transform: uppercase; transition: color .5s; }
 
 .nav__links { display: flex; align-items: center; gap: 0.35rem; }
 .nav__link { position: relative; padding: 0.6rem 1rem; font-size: 0.92rem; font-weight: 500; color: var(--txt-soft); transition: color .35s; }
@@ -491,7 +491,7 @@ body.menu-open { overflow: hidden; }
   background: var(--grad-wine);
   box-shadow: 0 40px 90px -30px rgba(86, 31, 48, 0.55);
 }
-.cta::before { content: ''; position: absolute; right: -6%; top: -40%; width: 55%; height: 180%; z-index: 0; opacity: 0.09; background: url('../img/gm-simbolo-branco.png') center/contain no-repeat; }
+.cta::before { content: ''; position: absolute; right: -6%; top: -40%; width: 55%; height: 180%; z-index: 0; opacity: 0.09; background: url('../img/gm-simbolo-branco.webp') center/contain no-repeat; }
 .cta::after { content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(760px circle at 50% -25%, rgba(247,210,163,0.22), transparent 62%); }
 .cta > * { position: relative; z-index: 1; }
 .cta h2 { margin-bottom: 1.2rem; color: var(--on-wine); }
@@ -1051,3 +1051,42 @@ body.menu-open { overflow: hidden; }
    `height: 100%` nas figuras da galeria). `display: contents` faz o wrapper
    sumir do layout: o <img> se posiciona exatamente como antes do WebP. */
 picture { display: contents; }
+
+/* =====================================================================
+   28. TIPOGRAFIA NO MOBILE: tracking negativo nao escala para baixo
+   Em em, -0.03em rende o mesmo percentual em qualquer corpo. Mas o efeito
+   PERCEBIDO nao e' o mesmo: em 60px o aperto refina, em 32px ele engole o
+   espaco entre palavras, porque a Clash Display ja' tem o glifo de espaco
+   estreito. O resultado media era "Temdiasemque" e "Semsurpresas.".
+   Aqui o aperto diminui e o espaco entre palavras e' reposto de proposito.
+   ===================================================================== */
+@media (max-width: 720px) {
+  .hero h1,
+  .display-1,
+  .display-2,
+  .article-hero h1,
+  .prose h2 {
+    letter-spacing: -0.005em;
+    word-spacing: 0.08em;
+  }
+  /* o mesmo vale para os titulos de card e de passo, em corpo menor ainda */
+  .need h3, .step h3, .faq summary, .h-md, .trust__item b {
+    letter-spacing: 0;
+    word-spacing: 0.04em;
+  }
+}
+
+/* Em telas medias o aperto volta parcialmente: ainda nao e' tipo grande. */
+@media (min-width: 721px) and (max-width: 1024px) {
+  .hero h1, .display-1, .display-2 { letter-spacing: -0.015em; word-spacing: 0.03em; }
+}
+
+/* O CRP da marca vinha a 0.64rem (10,2px) em caixa alta com 0.18em de
+   tracking: era o unico texto do site abaixo de 12px, e caixa alta espacada
+   nesse corpo fica com cara de ruido em vez de informacao. No mobile ele
+   cresce e o tracking cede, porque ali ele aparece ao lado do rosto, no
+   hero, e e' um dos gatilhos de confianca da primeira tela. */
+.brand__crp { font-size: 0.7rem; letter-spacing: 0.12em; }
+@media (max-width: 720px) {
+  .brand__crp { font-size: 0.76rem; letter-spacing: 0.08em; }
+}

@@ -3,13 +3,31 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RFCD1X5SDE"></script>
+  <!-- Google tag (gtag.js), carregada fora do caminho critico.
+       O script sao 187 KB e ~163 ms de linha principal. Subir na ociosidade
+       (ou no primeiro toque, o que vier antes) tira isso da primeira
+       renderizacao sem perder o pageview: o GA4 registra quando ele sobe. -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-RFCD1X5SDE');
+    (function () {
+      var subiu = false;
+      function sobe() {
+        if (subiu) return; subiu = true;
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-RFCD1X5SDE';
+        document.head.appendChild(s);
+      }
+      // quem interage primeiro nao pode ficar sem medicao
+      ['pointerdown', 'keydown', 'scroll'].forEach(function (ev) {
+        addEventListener(ev, sobe, { once: true, passive: true });
+      });
+      if ('requestIdleCallback' in window) requestIdleCallback(sobe, { timeout: 3500 });
+      else setTimeout(sobe, 2500);
+    })();
   </script>
   <title>Psicóloga em São Paulo e Online | Giselle Martins, CRP 06/132.406</title>
   <meta name="description" content="Psicoterapia para ansiedade, sobrecarga e autoestima, sem julgamentos. Giselle Martins, psicóloga CRP 06/132.406. Online e presencial em São Paulo." />
@@ -32,7 +50,8 @@
   <meta name="twitter:image" content="https://psicologagisellemartins.com.br/assets/img/giselle-hero.jpg" />
 
   <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
-  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@300,400,500,700&display=swap" />
+  <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
+  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600&f[]=satoshi@400,500,600,700&display=swap" />
   <link rel="stylesheet" href="assets/css/main.css" />
 
   <!-- TODO: CONFIRMAR COM GISELLE: assim que o endereço do consultório e os
@@ -166,7 +185,7 @@
       <a class="nav__link" href="#pratico">Valores e horários</a>
       <a class="nav__link" href="#faq">Dúvidas</a>
     </nav>
-    <a class="btn btn--primary nav__cta" data-cta-loc="nav" href="https://wa.me/5511993705704?text=Ol%C3%A1%2C%20Giselle.%20Vim%20pelo%20site%20e%20queria%20saber%20sobre%20hor%C3%A1rios%20e%20como%20funciona." target="_blank" rel="noopener">Falar no WhatsApp</a>
+    <a class="btn btn--primary nav__cta" data-cta-loc="nav" href="https://wa.me/5511993705704?text=Ol%C3%A1%2C%20Giselle.%20Vim%20pelo%20site%20e%20queria%20saber%20sobre%20hor%C3%A1rios%20e%20como%20funciona." aria-label="Falar com a Giselle no WhatsApp, a partir do menu" target="_blank" rel="noopener">Falar no WhatsApp</a>
     <button class="nav__burger" aria-label="Abrir menu"><span></span><span></span><span></span></button>
   </header>
 
@@ -176,7 +195,7 @@
     <a href="#processo">Como funciona</a>
     <a href="#pratico">Valores e horários</a>
     <a href="#faq">Dúvidas</a>
-    <a class="mobile-menu__cta" data-cta-loc="menu_mobile" href="https://wa.me/5511993705704?text=Ol%C3%A1%2C%20Giselle.%20Vim%20pelo%20site%20e%20gostaria%20de%20conversar." target="_blank" rel="noopener">Falar no WhatsApp</a>
+    <a class="mobile-menu__cta" data-cta-loc="menu_mobile" href="https://wa.me/5511993705704?text=Ol%C3%A1%2C%20Giselle.%20Vim%20pelo%20site%20e%20gostaria%20de%20conversar." aria-label="Falar com a Giselle no WhatsApp, a partir do menu" target="_blank" rel="noopener">Falar no WhatsApp</a>
   </div>
 
   <main id="top">
@@ -188,7 +207,7 @@
         <div class="hero__content">
           <!-- identidade compacta: só aparece no mobile, onde o retrato sai da dobra -->
           <div class="hero__id">
-            <picture><source srcset="assets/img/giselle-hero.webp" type="image/webp" /><img src="assets/img/giselle-hero.jpg" alt="Giselle Martins, psicóloga" width="869" height="1280" fetchpriority="high" /></picture>
+            <picture><source srcset="assets/img/giselle-hero-160.webp" type="image/webp" /><img src="assets/img/giselle-hero.jpg" alt="Giselle Martins, psicóloga" width="160" height="236" fetchpriority="high" /></picture>
             <div>
               <b>Giselle Martins</b>
               <span>Psicóloga · CRP 06/132.406</span>
@@ -216,7 +235,7 @@
           </div>
 
           <div class="hero__actions" data-cta-loc="hero">
-            <a class="btn btn--primary btn--lg" href="https://wa.me/5511993705704?text=Ol%C3%A1%2C%20Giselle.%20Vim%20pelo%20site%20e%20gostaria%20de%20conversar%20sobre%20come%C3%A7ar%20a%20terapia." target="_blank" rel="noopener">
+            <a class="btn btn--primary btn--lg" href="https://wa.me/5511993705704?text=Ol%C3%A1%2C%20Giselle.%20Vim%20pelo%20site%20e%20gostaria%20de%20conversar%20sobre%20come%C3%A7ar%20a%20terapia." aria-label="Falar com a Giselle no WhatsApp sobre começar a terapia" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12c0 2.1.6 4.1 1.6 5.9L0 24l6.3-1.6c1.7.9 3.7 1.4 5.7 1.4 6.6 0 12-5.4 12-12S18.6 0 12 0zm6 17c-.3.7-1.5 1.4-2 1.4-.5.1-1.1.1-1.8-.1-.4-.1-.9-.3-1.6-.6-2.8-1.2-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 .9-2.2.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.3 0 .5l-.4.6-.3.3c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.8.9c.3.1.5.2.6.3.1.3.1.7-.1 1.2z"/></svg>
               Falar com a Giselle no WhatsApp
             </a>
@@ -229,7 +248,7 @@
         <div class="hero__portrait">
           <div class="hero__chip hero__chip--2"><b>Neuropsicologia</b></div>
           <div class="portrait-card">
-            <picture><source srcset="assets/img/giselle-hero.webp" type="image/webp" /><img src="assets/img/giselle-hero.jpg" alt="Giselle Martins, psicóloga clínica e neuropsicóloga" width="869" height="1280" fetchpriority="high" /></picture>
+            <picture><source type="image/webp" srcset="assets/img/giselle-hero-420.webp 420w, assets/img/giselle-hero-900.webp 900w" sizes="(max-width: 1024px) 400px, 42vw" /><img src="assets/img/giselle-hero.jpg" alt="Giselle Martins, psicóloga clínica, em seu consultório" width="869" height="1280" loading="lazy" decoding="async" /></picture>
             <div class="portrait-badge"><i></i><span>Atendimento online e presencial</span></div>
           </div>
         </div>
@@ -323,7 +342,7 @@
 
         <div class="inline-cta glow-card reveal" data-cta-loc="apos_demandas">
           <p>Se você se reconheceu em alguma delas, já dá para conversar. Não precisa ter certeza de nada ainda.</p>
-          <a class="btn btn--primary" href="https://wa.me/5511993705704?text=Ol%C3%A1%2C%20Giselle.%20Me%20reconheci%20no%20que%20voc%C3%AA%20descreve%20no%20site%20e%20gostaria%20de%20conversar." target="_blank" rel="noopener">
+          <a class="btn btn--primary" href="https://wa.me/5511993705704?text=Ol%C3%A1%2C%20Giselle.%20Me%20reconheci%20no%20que%20voc%C3%AA%20descreve%20no%20site%20e%20gostaria%20de%20conversar." aria-label="Falar com a Giselle no WhatsApp sobre o que você se reconheceu" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12c0 2.1.6 4.1 1.6 5.9L0 24l6.3-1.6c1.7.9 3.7 1.4 5.7 1.4 6.6 0 12-5.4 12-12S18.6 0 12 0zm6 17c-.3.7-1.5 1.4-2 1.4-.5.1-1.1.1-1.8-.1-.4-.1-.9-.3-1.6-.6-2.8-1.2-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 .9-2.2.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.3 0 .5l-.4.6-.3.3c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.8.9c.3.1.5.2.6.3.1.3.1.7-.1 1.2z"/></svg>
             Falar com a Giselle
           </a>
@@ -335,7 +354,7 @@
     <section class="section-pad" id="sobre">
       <div class="wrap about__grid">
         <div class="about__media reveal">
-          <div class="about__photo"><picture><source srcset="assets/img/giselle-sobre.webp" type="image/webp" /><img src="assets/img/giselle-sobre.jpg" alt="Giselle Martins, psicóloga, em seu consultório" width="995" height="1280" loading="lazy" decoding="async" /></picture></div>
+          <div class="about__photo"><picture><source type="image/webp" srcset="assets/img/giselle-sobre-420.webp 420w, assets/img/giselle-sobre-760.webp 760w" sizes="(max-width: 1024px) 92vw, 40vw" /><img src="assets/img/giselle-sobre.jpg" alt="Giselle Martins, psicóloga, em seu consultório" width="995" height="1280" loading="lazy" decoding="async" /></picture></div>
           <div class="about__quote">
             <p>“Acolher cada pessoa em sua história, com um olhar para além das imperfeições.”</p>
             <cite>O que guia o meu trabalho</cite>
@@ -371,7 +390,7 @@
 
           <div class="inline-cta glow-card reveal" data-cta-loc="apos_sobre">
             <p>Quer saber se a terapia comigo faz sentido para você? Essa é exatamente a conversa que fazemos antes de marcar.</p>
-            <a class="btn btn--primary" href="https://wa.me/5511993705704?text=Ol%C3%A1%2C%20Giselle.%20Li%20sobre%20o%20seu%20trabalho%20no%20site%20e%20gostaria%20de%20conversar." target="_blank" rel="noopener">
+            <a class="btn btn--primary" href="https://wa.me/5511993705704?text=Ol%C3%A1%2C%20Giselle.%20Li%20sobre%20o%20seu%20trabalho%20no%20site%20e%20gostaria%20de%20conversar." aria-label="Falar com a Giselle no WhatsApp sobre o trabalho dela" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12c0 2.1.6 4.1 1.6 5.9L0 24l6.3-1.6c1.7.9 3.7 1.4 5.7 1.4 6.6 0 12-5.4 12-12S18.6 0 12 0zm6 17c-.3.7-1.5 1.4-2 1.4-.5.1-1.1.1-1.8-.1-.4-.1-.9-.3-1.6-.6-2.8-1.2-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 .9-2.2.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.3 0 .5l-.4.6-.3.3c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.8.9c.3.1.5.2.6.3.1.3.1.7-.1 1.2z"/></svg>
               Falar com a Giselle
             </a>
@@ -513,7 +532,7 @@
 
         <div class="inline-cta glow-card reveal" data-cta-loc="apos_faq">
           <p>Ficou uma dúvida que não está aqui? Me pergunte direto. Perguntar não compromete você a começar.</p>
-          <a class="btn btn--primary" href="https://wa.me/5511993705704?text=Ol%C3%A1%2C%20Giselle.%20Vi%20o%20site%20e%20ficou%20uma%20d%C3%BAvida%3A%20" target="_blank" rel="noopener">
+          <a class="btn btn--primary" href="https://wa.me/5511993705704?text=Ol%C3%A1%2C%20Giselle.%20Vi%20o%20site%20e%20ficou%20uma%20d%C3%BAvida%3A%20" aria-label="Tirar uma dúvida com a Giselle no WhatsApp" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12c0 2.1.6 4.1 1.6 5.9L0 24l6.3-1.6c1.7.9 3.7 1.4 5.7 1.4 6.6 0 12-5.4 12-12S18.6 0 12 0zm6 17c-.3.7-1.5 1.4-2 1.4-.5.1-1.1.1-1.8-.1-.4-.1-.9-.3-1.6-.6-2.8-1.2-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 .9-2.2.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.3 0 .5l-.4.6-.3.3c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.8.9c.3.1.5.2.6.3.1.3.1.7-.1 1.2z"/></svg>
             Tirar uma dúvida
           </a>
@@ -529,7 +548,7 @@
           <h2 class="display-1">Você não precisa estar pronto.<br />Só precisa começar.</h2>
           <p class="lead">Ninguém chega à terapia com as ideias organizadas. Se você leu até aqui, alguma coisa já pediu atenção. Me manda uma mensagem, a gente descobre o resto junto.</p>
           <div class="cta__actions">
-            <a class="btn btn--primary btn--lg" href="https://wa.me/5511993705704?text=Ol%C3%A1%2C%20Giselle.%20Vim%20pelo%20site%20e%20gostaria%20de%20dar%20o%20primeiro%20passo." target="_blank" rel="noopener">
+            <a class="btn btn--primary btn--lg" href="https://wa.me/5511993705704?text=Ol%C3%A1%2C%20Giselle.%20Vim%20pelo%20site%20e%20gostaria%20de%20dar%20o%20primeiro%20passo." aria-label="Falar com a Giselle no WhatsApp para dar o primeiro passo" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12c0 2.1.6 4.1 1.6 5.9L0 24l6.3-1.6c1.7.9 3.7 1.4 5.7 1.4 6.6 0 12-5.4 12-12S18.6 0 12 0zm6 17c-.3.7-1.5 1.4-2 1.4-.5.1-1.1.1-1.8-.1-.4-.1-.9-.3-1.6-.6-2.8-1.2-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 .9-2.2.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.3 0 .5l-.4.6-.3.3c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.8.9c.3.1.5.2.6.3.1.3.1.7-.1 1.2z"/></svg>
               Falar com a Giselle no WhatsApp
             </a>
@@ -570,6 +589,8 @@
           <a href="terapia-online.html">Terapia online</a>
           <a href="psicologa-ansiedade-sao-paulo.html">Psicóloga para ansiedade em SP</a>
           <a href="artigos/">Guias sobre saúde mental</a>
+          <a href="artigos/primeira-sessao-de-terapia.html">O que falar na primeira sessão</a>
+          <a href="artigos/psicologo-ou-psiquiatra.html">Psicólogo ou psiquiatra?</a>
           <a href="artigos/desenvolvimento-humano.html">Para empresas</a>
         </div>
         <div class="footer__col" data-cta-loc="rodape">
@@ -595,7 +616,7 @@
 
   <!-- CTA fixo do mobile: texto em vez de ícone ambíguo, respeita safe-area -->
   <div class="mobile-cta" data-cta-loc="mobile_bar">
-    <a class="btn btn--primary" href="https://wa.me/5511993705704?text=Ol%C3%A1%2C%20Giselle.%20Vim%20pelo%20site%20e%20gostaria%20de%20conversar." target="_blank" rel="noopener">
+    <a class="btn btn--primary" href="https://wa.me/5511993705704?text=Ol%C3%A1%2C%20Giselle.%20Vim%20pelo%20site%20e%20gostaria%20de%20conversar." aria-label="Falar com a Giselle no WhatsApp" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12c0 2.1.6 4.1 1.6 5.9L0 24l6.3-1.6c1.7.9 3.7 1.4 5.7 1.4 6.6 0 12-5.4 12-12S18.6 0 12 0zm6 17c-.3.7-1.5 1.4-2 1.4-.5.1-1.1.1-1.8-.1-.4-.1-.9-.3-1.6-.6-2.8-1.2-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 .9-2.2.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.3 0 .5l-.4.6-.3.3c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.8.9c.3.1.5.2.6.3.1.3.1.7-.1 1.2z"/></svg>
       Falar com a Giselle no WhatsApp
     </a>
@@ -625,7 +646,7 @@
       <span class="dock__label">Dúvidas</span>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M9.2 9.2a2.9 2.9 0 0 1 5.6 1c0 1.9-2.8 2.4-2.8 4"/><path d="M12 17.2v.02"/></svg>
     </a>
-    <a class="dock__item dock__item--cta" data-cta-loc="dock" href="https://wa.me/5511993705704?text=Ol%C3%A1%2C%20Giselle.%20Vim%20pelo%20site%20e%20gostaria%20de%20conversar." target="_blank" rel="noopener">
+    <a class="dock__item dock__item--cta" data-cta-loc="dock" href="https://wa.me/5511993705704?text=Ol%C3%A1%2C%20Giselle.%20Vim%20pelo%20site%20e%20gostaria%20de%20conversar." aria-label="Falar com a Giselle no WhatsApp" target="_blank" rel="noopener">
       <span class="dock__label">Falar com a Giselle</span>
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12c0 2.1.6 4.1 1.6 5.9L0 24l6.3-1.6c1.7.9 3.7 1.4 5.7 1.4 6.6 0 12-5.4 12-12S18.6 0 12 0zm6 17c-.3.7-1.5 1.4-2 1.4-.5.1-1.1.1-1.8-.1-.4-.1-.9-.3-1.6-.6-2.8-1.2-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 .9-2.2.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.3 0 .5l-.4.6-.3.3c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.8.9c.3.1.5.2.6.3.1.3.1.7-.1 1.2z"/></svg>
     </a>

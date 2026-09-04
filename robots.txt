@@ -2,3 +2,6 @@ User-agent: *
 Allow: /
 
 Sitemap: https://psicologagisellemartins.com.br/sitemap.xml
+
+# Resumo estruturado do site para assistentes de IA e busca por resposta:
+# https://psicologagisellemartins.com.br/llms.txt

@@ -3,13 +3,31 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RFCD1X5SDE"></script>
+  <!-- Google tag (gtag.js), carregada fora do caminho critico.
+       O script sao 187 KB e ~163 ms de linha principal. Subir na ociosidade
+       (ou no primeiro toque, o que vier antes) tira isso da primeira
+       renderizacao sem perder o pageview: o GA4 registra quando ele sobe. -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-RFCD1X5SDE');
+    (function () {
+      var subiu = false;
+      function sobe() {
+        if (subiu) return; subiu = true;
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-RFCD1X5SDE';
+        document.head.appendChild(s);
+      }
+      // quem interage primeiro nao pode ficar sem medicao
+      ['pointerdown', 'keydown', 'scroll'].forEach(function (ev) {
+        addEventListener(ev, sobe, { once: true, passive: true });
+      });
+      if ('requestIdleCallback' in window) requestIdleCallback(sobe, { timeout: 3500 });
+      else setTimeout(sobe, 2500);
+    })();
   </script>
   <title>Síndrome do pânico: o que fazer numa crise | Giselle Martins</title>
   <meta name="description" content="O que fazer durante uma crise de pânico, quanto tempo ela dura e como tratar a síndrome do pânico. Guia da psicóloga Giselle Martins, CRP 06/132.406." />
@@ -28,7 +46,8 @@
   <meta property="og:url" content="https://psicologagisellemartins.com.br/artigos/sindrome-do-panico.html" />
   <meta property="og:image" content="https://psicologagisellemartins.com.br/assets/img/giselle-hero.jpg" />
   <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
-  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@300,400,500,700&display=swap" />
+  <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
+  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600&f[]=satoshi@400,500,600,700&display=swap" />
   <link rel="stylesheet" href="../assets/css/main.css" />
   <link rel="stylesheet" href="../assets/css/article.css" />
   <script type="application/ld+json">
@@ -156,7 +175,7 @@
       <a class="nav__link" href="../index.html#pratico">Valores e horários</a>
       <a class="nav__link" href="../index.html#faq">Dúvidas</a>
     </nav>
-    <a class="btn btn--primary nav__cta" data-cta-loc="nav" href="https://wa.me/5511993705704?text=Ol%C3%A1%2C%20Giselle.%20Vim%20pelo%20site%20e%20queria%20saber%20sobre%20hor%C3%A1rios%20e%20como%20funciona." target="_blank" rel="noopener">Falar no WhatsApp</a>
+    <a class="btn btn--primary nav__cta" data-cta-loc="nav" href="https://wa.me/5511993705704?text=Ol%C3%A1%2C%20Giselle.%20Vim%20pelo%20site%20e%20queria%20saber%20sobre%20hor%C3%A1rios%20e%20como%20funciona." aria-label="Falar com a Giselle no WhatsApp, a partir do menu" target="_blank" rel="noopener">Falar no WhatsApp</a>
     <button class="nav__burger" aria-label="Abrir menu"><span></span><span></span><span></span></button>
   </header>
   <div class="mobile-menu">
@@ -165,7 +184,7 @@
     <a href="../index.html#processo">Como funciona</a>
     <a href="../index.html#pratico">Valores e horários</a>
     <a href="../index.html#faq">Dúvidas</a>
-    <a class="mobile-menu__cta" data-cta-loc="menu_mobile" href="https://wa.me/5511993705704?text=Ol%C3%A1%2C%20Giselle.%20Vim%20pelo%20site%20e%20gostaria%20de%20conversar." target="_blank" rel="noopener">Falar no WhatsApp</a>
+    <a class="mobile-menu__cta" data-cta-loc="menu_mobile" href="https://wa.me/5511993705704?text=Ol%C3%A1%2C%20Giselle.%20Vim%20pelo%20site%20e%20gostaria%20de%20conversar." aria-label="Falar com a Giselle no WhatsApp, a partir do menu" target="_blank" rel="noopener">Falar no WhatsApp</a>
   </div>
 
   <main>
@@ -375,7 +394,7 @@
         <div class="article-cta reveal" data-cta-loc="cta_final">
           <h3>As crises não precisam comandar a sua vida</h3>
           <p>Se o medo da próxima crise já decide por onde você anda, me manda uma mensagem. Eu respondo pessoalmente, sem compromisso.</p>
-          <a class="btn btn--primary btn--lg" href="https://wa.me/5511993705704?text=Ol%C3%A1%2C%20Giselle.%20Li%20o%20guia%20sobre%20s%C3%ADndrome%20do%20p%C3%A2nico%20no%20site%20e%20gostaria%20de%20conversar." target="_blank" rel="noopener">
+          <a class="btn btn--primary btn--lg" href="https://wa.me/5511993705704?text=Ol%C3%A1%2C%20Giselle.%20Li%20o%20guia%20sobre%20s%C3%ADndrome%20do%20p%C3%A2nico%20no%20site%20e%20gostaria%20de%20conversar." aria-label="Falar com a Giselle no WhatsApp para dar o primeiro passo" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12c0 2.1.6 4.1 1.6 5.9L0 24l6.3-1.6c1.7.9 3.7 1.4 5.7 1.4 6.6 0 12-5.4 12-12S18.6 0 12 0zm6 17c-.3.7-1.5 1.4-2 1.4-.5.1-1.1.1-1.8-.1-.4-.1-.9-.3-1.6-.6-2.8-1.2-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 .9-2.2.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.3 0 .5l-.4.6-.3.3c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.8.9c.3.1.5.2.6.3.1.3.1.7-.1 1.2z"/></svg>
             Falar com a Giselle
           </a>
@@ -411,7 +430,7 @@
     <svg viewBox="0 0 32 32"><path d="M16 0C7.163 0 0 7.163 0 16c0 2.833.738 5.49 2.031 7.8L.057 31.486a.5.5 0 0 0 .61.61l7.793-2.016A15.93 15.93 0 0 0 16 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm0 29.333a13.27 13.27 0 0 1-6.786-1.857l-.487-.29-5.048 1.306 1.327-4.924-.317-.503A13.24 13.24 0 0 1 2.667 16C2.667 8.636 8.636 2.667 16 2.667S29.333 8.636 29.333 16 23.364 29.333 16 29.333z"/></svg>
   </a>
   <div class="mobile-cta" data-cta-loc="mobile_bar">
-    <a class="btn btn--primary" href="https://wa.me/5511993705704?text=Ol%C3%A1%2C%20Giselle.%20Li%20o%20texto%20sobre%20s%C3%ADndrome%20do%20p%C3%A2nico%20e%20queria%20conversar." target="_blank" rel="noopener">
+    <a class="btn btn--primary" href="https://wa.me/5511993705704?text=Ol%C3%A1%2C%20Giselle.%20Li%20o%20texto%20sobre%20s%C3%ADndrome%20do%20p%C3%A2nico%20e%20queria%20conversar." aria-label="Falar com a Giselle no WhatsApp" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12c0 2.1.6 4.1 1.6 5.9L0 24l6.3-1.6c1.7.9 3.7 1.4 5.7 1.4 6.6 0 12-5.4 12-12S18.6 0 12 0zm6 17c-.3.7-1.5 1.4-2 1.4-.5.1-1.1.1-1.8-.1-.4-.1-.9-.3-1.6-.6-2.8-1.2-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 .9-2.2.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.3 0 .5l-.4.6-.3.3c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.8.9c.3.1.5.2.6.3.1.3.1.7-.1 1.2z"/></svg>
       Falar com a Giselle no WhatsApp
     </a>
