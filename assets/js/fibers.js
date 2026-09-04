@@ -13,7 +13,7 @@
    Custos controlados de propósito (o commit anterior do repo foi justamente
    remover blur de camada animada por travar a rolagem):
    · roda só no hero e PARA quando o hero sai da viewport;
-   · renderiza a 55% da resolução e a 30fps: é um degradê difuso;
+   · renderiza a 45% da resolução e a 24fps: é um degradê difuso;
    · desliga em prefers-reduced-motion, em tela estreita e se o WebGL faltar.
    ===================================================================== */
 (() => {
@@ -134,11 +134,11 @@
   gl.uniform3f(gl.getUniformLocation(prog, 'u_mauve'), 0.737, 0.525, 0.576);
   gl.uniform3f(gl.getUniformLocation(prog, 'u_gold'), 0.906, 0.714, 0.506);
 
-  /* Escala interna: o canvas renderiza a 55% e o CSS estica de volta.
-     São fibras difusas atrás de uma máscara radial: ninguém distingue,
-     e o custo cai para ~30% dos fragmentos (1151x1200 = 1,38M por frame
-     vira ~420k). */
-  const SCALE_PX = 0.55;
+  /* Escala interna: o canvas renderiza a 45% e o CSS estica de volta.
+     São fibras difusas atrás de uma máscara radial com vinheta: ninguém
+     distingue a resolução, e o custo cai para ~20% dos fragmentos
+     (1151x1200 = 1,38M por frame vira ~280k). */
+  const SCALE_PX = 0.45;
 
   const resize = () => {
     const w = (cv.clientWidth * SCALE_PX) | 0, h = (cv.clientHeight * SCALE_PX) | 0;
@@ -150,10 +150,10 @@
 
   let raf = 0, t0 = performance.now(), visible = true, lastDraw = 0;
 
-  /* 30fps em vez de 60: o movimento é deliberadamente mais lento que a
-     respiração de quem lê, então metade dos quadros é indistinguível 
-     e devolve metade do orçamento de frame para a rolagem. */
-  const MIN_DT = 1000 / 30;
+  /* 24fps em vez de 60: a deriva é de 0.06 por segundo, mais lenta que a
+     respiração de quem lê. Nesse ritmo o quadro extra não aparece, e o
+     orçamento que ele custava volta para a rolagem. */
+  const MIN_DT = 1000 / 24;
 
   const frame = (now) => {
     raf = requestAnimationFrame(frame);

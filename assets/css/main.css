@@ -201,6 +201,12 @@ p { text-wrap: pretty; }
    ===================================================================== */
 .ambient {
   position: fixed; inset: 0; z-index: -2; overflow: hidden; pointer-events: none;
+  /* mesma promocao que .grain recebeu logo abaixo, e pelo mesmo motivo: sem
+     camada propria, este overlay fixo de tres degrades sobrepostos repinta a
+     viewport inteira em cada frame de rolagem. Com `contain: paint` o
+     navegador tambem para de considerar o que vaza do overflow:hidden. */
+  transform: translateZ(0);
+  contain: paint;
   background:
     radial-gradient(1100px 760px at 80% -10%, rgba(188, 134, 147, 0.22), transparent 60%),
     radial-gradient(900px 680px at 5% 105%, rgba(247, 210, 163, 0.2), transparent 60%),
@@ -241,6 +247,7 @@ p { text-wrap: pretty; }
    ===================================================================== */
 .nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 800;
+  transform: translateZ(0);
   display: flex; align-items: center; justify-content: space-between;
   padding: 1.4rem var(--pad);
   transition: padding .5s var(--ease), background .5s, border-color .5s, box-shadow .5s;
@@ -308,7 +315,9 @@ body.menu-open { overflow: hidden; }
 .btn--ghost { background: transparent; color: var(--wine); border-color: var(--line-strong); }
 .btn--ghost:hover { border-color: var(--wine); background: rgba(156,67,89,0.06); transform: translateY(-3px); }
 /* fantasma sobre vinho */
-.on-wine .btn--ghost, .btn--ghost-light { background: rgba(255,255,255,0.06); color: var(--on-wine); border-color: var(--w-line); backdrop-filter: blur(8px); }
+/* sem backdrop-filter: desfoque de fundo obriga o compositor a reler a
+   regiao atras do elemento em cada frame de rolagem. */
+.on-wine .btn--ghost, .btn--ghost-light { background: rgba(255,255,255,0.1); color: var(--on-wine); border-color: var(--w-line); }
 .on-wine .btn--ghost:hover, .btn--ghost-light:hover { background: rgba(255,255,255,0.12); border-color: var(--w-line-strong); }
 
 .btn--lg { padding: 1.15rem 2.3rem; font-size: 1.02rem; }
@@ -1089,4 +1098,19 @@ picture { display: contents; }
 .brand__crp { font-size: 0.7rem; letter-spacing: 0.12em; }
 @media (max-width: 720px) {
   .brand__crp { font-size: 0.76rem; letter-spacing: 0.08em; }
+}
+
+/* =====================================================================
+   29. ORBES: motor sempre ligado
+   Os tres orbes do fundo animam `transform` com `scale` em laco infinito,
+   nas 14 paginas, sem parar nunca. Sao degrades radiais de 32vw a 44vw com
+   opacidade entre 0.22 e 0.5, atras de tudo, com deriva de 8vw ao longo de
+   24 segundos: ninguem percebe o movimento, mas o compositor nunca fica
+   ocioso e o `scale` obriga a rasterizar na maior escala da animacao.
+   No celular, onde a GPU e' o gargalo (e' o mesmo motivo pelo qual o shader
+   do hero nem inicia abaixo de 900px), os orbes ficam parados. A arte
+   continua igual, so o motor desliga.
+   ===================================================================== */
+@media (max-width: 900px) {
+  .orb { animation: none; }
 }
